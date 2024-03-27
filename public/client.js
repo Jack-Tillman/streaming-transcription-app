@@ -1,9 +1,13 @@
-
+// const fetch = require("node-fetch");
 const captions = window.document.getElementById("captions");
-const fullTranscription = window.document.getElementById("full-transcription")
+const fullTranscription = window.document.getElementById("full-transcription");
 
-const transcriptButton = window.document.getElementById("transcript-button")
+const gptResponseEl = document.getElementById("gpt-response");
+
+const transcriptButton = window.document.getElementById("transcript-button");
 let transcriptionArray = [];
+
+// const { OPENAI_API_KEY } = process.env;
 
 async function getMicrophone() {
   try {
@@ -65,12 +69,40 @@ async function start(socket) {
 }
 
 async function processTranscription(transcription) {
-  // Update fullTranscription to include each chunk 
+  // Update fullTranscription to include each chunk
   fullTranscription.innerHTML += `<span>${transcription}</span><br>`;
   console.log("Updated full transcription:", transcription);
-
 }
 
+async function chatWithGPT(content) {
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${OPENAI_API_KEY}`,
+    },
+    body: JSON.stringify({ content: content }),
+  });
+
+  const data = await response.json();
+  console.log("reformat-transcript data is:", data);
+  // return just the content of the response, which is the plain text report
+
+  return data.choices[0].message.content;
+}
+
+// Event listener for the reformat button
+document.getElementById("reformat-btn").addEventListener("click", async () => {
+  const content =
+    fullTranscription.innerText || fullTranscription.textContent || "";
+    if (content){
+      const gptResponse = await chatWithGPT(content);
+      gptResponseEl.innerHTML = gptResponse; // Displaying the response from ChatGPT-4
+    } else {
+      console.log('waiting for transcription');
+    }
+
+});
 
 window.addEventListener("load", () => {
   const socket = new WebSocket("ws://localhost:3000");
@@ -83,7 +115,9 @@ window.addEventListener("load", () => {
   socket.addEventListener("message", (event) => {
     const data = JSON.parse(event.data);
     if (data.channel.alternatives[0].transcript !== "") {
-      captions.innerHTML = data ? `<span>${data.channel.alternatives[0].transcript}</span>` : "";
+      captions.innerHTML = data
+        ? `<span>${data.channel.alternatives[0].transcript}</span>`
+        : "";
       processTranscription(data.channel.alternatives[0].transcript);
     }
   });

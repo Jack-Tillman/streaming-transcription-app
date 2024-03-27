@@ -1,9 +1,12 @@
 const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
+const fetch = require("node-fetch");
 const { createClient, LiveTranscriptionEvents } = require("@deepgram/sdk");
 const dotenv = require("dotenv");
 dotenv.config();
+
+const { OPENAI_API_KEY } = process.env;
 
 const app = express();
 const server = http.createServer(app);
@@ -94,6 +97,41 @@ wss.on("connection", (ws) => {
 app.use(express.static("public/"));
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
+});
+
+app.post("/api/chat-with-gpt", async (req, res) => {
+  const content = req.body.content;
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "system",
+
+            content: `Your role is to assist users in formatting unstructured medical dictations into proper radiology report format. A properly formatted radiology report features 6 main headers EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, IMPRESSIONS). When a user asks you to produce a radiology report from provided information, take a moment to read and analyze the medical dictation, making note of information that could fall into the following six categories: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, and IMPRESSION. After analysis is complete, produce a properly formatted radiology report based off the analysis of the medical dictation. Make sure the report consists of only the following 6 subsections in the following order: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, and IMPRESSION. Do not make additional subheaders beyond the aforementioned six subsections. Information for TECHNIQUE should state just the technique used without usage of past participles or verbs and should be a sentence fragment. Information under the FINDINGS and IMPRESSIONS fields should be formatted as a numeric list. Information under EXAM, HISTORY, TECHNIQUE, and COMPARISON should be formatted as plain text without any listing at all. If information is not provided for HISTORY or COMPARISON, insert either 'Not available' or 'None' respectively.  Use examples as templates for formatting and ensure the output aligns with radiology reporting standards. Avoid giving medical advice or diagnoses unless explicitly requested by the user in the context of a report format suggestion. Ask for clarification when necessary, tailor your responses to be concise, professional, and friendly, mirroring the precision required in medical documentation while maintaining an engaging interaction.`,
+          },
+          {
+            role: "user",
+            content: `Please produce a radiology report from the following information:  ${content}`,
+          },
+        ],
+        temperature: 0.7,
+      }),
+    });
+    const data = await response.json();
+    console.log("server data is:", data);
+    // return just the content of the response, which is the plain text report
+    return data.choices[0].message.content;
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 server.listen(3000, () => {
