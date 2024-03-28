@@ -33,14 +33,20 @@
     <span>Full Transcription Below</span>
     <span></span>
   </div>
+  <div class="full-json" id="full-json">
+    <span></span>
+  </div>
   <div class="button-container">
     <a href="https://console.deepgram.com/signup" class="info-button sign-up" target="_blank">Sign Up
     </a>
     <a href="https://developers.deepgram.com/docs/introduction" class="info-button docs" target="_blank">Read the
       Docs</a>
-    <a class="reformat-button" id="reformat-button" target="_blank">Show Full transcript</a>
+    <button class="info-button reformat-button" id="reformat-button" target="_blank">Make Report</button>
+    <button class="info-button json-button" id="json-button" target="_blank">Make JSON</button>
+    <button class="info-button insert-button" id="insert-button" target="_blank">Insert JSON</button>
   </div>
-  <div id="gpt-response">reformat into a report</div>
+  <div id="gpt-response"></div>
+  <div id="json-response"></div>
   <script src="client.js"></script>
 </body>
 

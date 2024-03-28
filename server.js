@@ -99,10 +99,11 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
 
-app.post("/api/chat-with-gpt", async (req, res) => {
+/* API call to GPT-4 to format content into report */
+app.post("/api/createReport", async (req, res) => {
   try {
     const {content} = req.body;
-    console.log('server content is:', content);
+    console.log('server report content is:', content);
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -128,6 +129,46 @@ app.post("/api/chat-with-gpt", async (req, res) => {
     const data = await response.json();
     console.log("server data is:", data);
     console.log('server data.choices etc is', data.choices[0].message.content);
+    res.json(data);
+    // return just the content of the response, which is the plain text report
+    return data.choices[0].message.content;
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+/* api call to format report into JSON data */
+
+app.post("/api/createJson", async (req, res) => {
+  try {
+    const {content} = req.body;
+    console.log('server json content is:', content);
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "system",
+
+            content: `Your role is to assist users in converting Radiology reports in plaintext format into the object type JSON format. The response to the user should resemble the following JSON format:{"exam": exam, "history": history,"technique": technique, "comparison": comparison,"findings": findings,"impressions": impressions}, with fields not in quotations being filled by the relevant content from the information given by the user. When a user asks you to convert a radiology report into JSON, take a moment to read and analyze the given information, making note of information that could fall into the following six categories: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, and IMPRESSION. After analysis is complete, produce a JSON version of the file based off the analysis of the given information. Make sure the JSON consists of only the following 6 subsections in the following order: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, and IMPRESSION. Do not make additional subheaders beyond the aforementioned six subsections. Do not include any new words or remove words from the radiology report when making the JSON. Use examples as templates for formatting and ensure the output aligns with typical object-type JSON conventions. Avoid giving medical advice or diagnoses unless explicitly requested by the user in the context of a report format suggestion.`,
+          },
+          {
+            role: "user",
+            content: `Please convert the following information into JSON format with only 6 keys: exam, history, technique, comparison, findings, impression. ${content}`,
+          },
+        ],
+        temperature: 0.7,
+      }),
+    });
+    const data = await response.json();
+    console.log("server json data response is:", data);
+    console.log('server json resp for data.choices etc is', data.choices[0].message.content);
     res.json(data);
     // return just the content of the response, which is the plain text report
     return data.choices[0].message.content;

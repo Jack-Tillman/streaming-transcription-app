@@ -1,11 +1,13 @@
 // const fetch = require("node-fetch");
 const captions = window.document.getElementById("captions");
 const fullTranscription = window.document.getElementById("full-transcription");
+const fullJson = window.document.getElementById("json-response");
 
 const gptResponseEl = document.getElementById("gpt-response");
-
-const transcriptButton = window.document.getElementById("transcript-button");
+const jsonResponseEl = document.getElementById("json-response");
 let transcriptionArray = [];
+
+/* Microphone functions */
 
 async function getMicrophone() {
   try {
@@ -66,16 +68,22 @@ async function start(socket) {
   });
 }
 
+/* GPT functions */
+
+/* called after each spoken chunk to make full transcription */
 async function processTranscription(transcription) {
   // Update fullTranscription to include each chunk
   fullTranscription.innerHTML += `<span>${transcription}</span><br>`;
   console.log("Updated full transcription:", transcription);
 }
-let formattedReport = '';
+
+let formattedReport = "";
+let currentJson = '';
+/* send request to GPT-4 to format data into a radiology report */
 async function chatWithGPT(content) {
   try {
-    console.log('time to make the report');
-    const response = await fetch("/api/chat-with-gpt", {
+    console.log("time to make the report");
+    const response = await fetch("/api/createReport", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -87,8 +95,32 @@ async function chatWithGPT(content) {
     console.log("reformat-transcript data is:", data);
     // return just the content of the response, which is the plain text report
     formattedReport = data.choices[0].message.content;
-    console.log('done making reports : )!')
-    console.log('formattedReport is', formattedReport)
+    console.log("done making reports : )!");
+    console.log("formattedReport is", formattedReport);
+    return data.choices[0].message.content;
+  } catch (error) {
+    throw error;
+  }
+}
+
+/* send request to GPT-4 to format radiology report into JSON */
+async function jsonGPT(content) {
+  try {
+    console.log("time to make the json");
+    const response = await fetch("/api/createJson", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content: content }),
+    });
+
+    const data = await response.json();
+    console.log("json client data is:", data);
+    // return just the content of the response, which is the plain text report
+    currentJson = data.choices[0].message.content;
+    console.log("done making json : )!");
+    console.log("currentJson is", currentJson);
     return data.choices[0].message.content;
   } catch (error) {
     throw error;
@@ -102,13 +134,26 @@ document
     const content =
       fullTranscription.innerText || fullTranscription.textContent || "";
     if (content) {
-      console.log('content is:', content);
+      console.log("content is:", content);
       const gptResponse = await chatWithGPT(content);
       gptResponseEl.innerHTML = gptResponse; // Displaying the response from ChatGPT-4
     } else {
       console.log("waiting for transcription");
     }
   });
+
+// Event listener for the json button
+document.getElementById("json-button").addEventListener("click", async () => {
+  const content =
+    gptResponseEl.innerText || gptResponseEl.textContent || "";
+  if (content) {
+    console.log("JSON content is:", content);
+    const gptResponse = await jsonGPT(content);
+    jsonResponseEl.innerHTML = gptResponse; // Displaying the response from ChatGPT-4
+  } else {
+    console.log("waiting for JSON");
+  }
+});
 
 window.addEventListener("load", () => {
   const socket = new WebSocket("ws://localhost:3000");

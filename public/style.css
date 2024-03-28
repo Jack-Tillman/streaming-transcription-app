@@ -221,7 +221,34 @@ h1 {
 
 #gpt-response {
   height:auto;
-  width: 200px;
+  width: 800px;
   margin: 0;
   padding: 1rem;
+}
+
+#json-response {
+  height:auto;
+  width: 800px;
+  margin: 0;
+  padding: 1rem;
+}
+
+#reformat-button, #json-button, #insert-button {
+  color: white;
+  position: relative;
+  background-origin: border-box;
+  box-shadow: 2px 1000px 1px var(--md-code-background) inset;
+  z-index: 1;
+}
+
+#reformat-button {
+  background-image: linear-gradient(90deg, #bbbaf8 -91.5%, #7b63cf 80.05%);
+}
+
+#json-button {
+  background-image: linear-gradient(90deg, #00ff40 -91.5%, #e68a00 80.05%);
+}
+
+#insert-button {
+  background-image: linear-gradient(90deg, #ff8181 -91.5%, #8d0b77 80.05%);
 }
