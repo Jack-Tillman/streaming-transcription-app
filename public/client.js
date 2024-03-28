@@ -92,17 +92,18 @@ async function chatWithGPT(content) {
 }
 
 // Event listener for the reformat button
-document.getElementById("reformat-btn").addEventListener("click", async () => {
-  const content =
-    fullTranscription.innerText || fullTranscription.textContent || "";
-    if (content){
+document
+  .getElementById("reformat-button")
+  .addEventListener("click", async () => {
+    const content =
+      fullTranscription.innerText || fullTranscription.textContent || "";
+    if (content) {
       const gptResponse = await chatWithGPT(content);
       gptResponseEl.innerHTML = gptResponse; // Displaying the response from ChatGPT-4
     } else {
-      console.log('waiting for transcription');
+      console.log("waiting for transcription");
     }
-
-});
+  });
 
 window.addEventListener("load", () => {
   const socket = new WebSocket("ws://localhost:3000");
