@@ -5,7 +5,6 @@ const fetch = require("node-fetch");
 const { createClient, LiveTranscriptionEvents } = require("@deepgram/sdk");
 const dotenv = require("dotenv");
 dotenv.config();
-
 const { OPENAI_API_KEY } = process.env;
 
 const app = express();
@@ -95,13 +94,15 @@ wss.on("connection", (ws) => {
 });
 
 app.use(express.static("public/"));
+app.use(express.json());
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
 
 app.post("/api/chat-with-gpt", async (req, res) => {
-  const content = req.body.content;
   try {
+    const {content} = req.body;
+    console.log('server content is:', content);
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -126,6 +127,8 @@ app.post("/api/chat-with-gpt", async (req, res) => {
     });
     const data = await response.json();
     console.log("server data is:", data);
+    console.log('server data.choices etc is', data.choices[0].message.content);
+    res.json(data);
     // return just the content of the response, which is the plain text report
     return data.choices[0].message.content;
   } catch (error) {

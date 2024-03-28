@@ -218,3 +218,10 @@ h1 {
   left: 20px;
   top: -144px;
 }
+
+#gpt-response {
+  height:auto;
+  width: 200px;
+  margin: 0;
+  padding: 1rem;
+}

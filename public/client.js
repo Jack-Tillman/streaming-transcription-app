@@ -7,8 +7,6 @@ const gptResponseEl = document.getElementById("gpt-response");
 const transcriptButton = window.document.getElementById("transcript-button");
 let transcriptionArray = [];
 
-// const { OPENAI_API_KEY } = process.env;
-
 async function getMicrophone() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -73,22 +71,28 @@ async function processTranscription(transcription) {
   fullTranscription.innerHTML += `<span>${transcription}</span><br>`;
   console.log("Updated full transcription:", transcription);
 }
-
+let formattedReport = '';
 async function chatWithGPT(content) {
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({ content: content }),
-  });
+  try {
+    console.log('time to make the report');
+    const response = await fetch("/api/chat-with-gpt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content: content }),
+    });
 
-  const data = await response.json();
-  console.log("reformat-transcript data is:", data);
-  // return just the content of the response, which is the plain text report
-
-  return data.choices[0].message.content;
+    const data = await response.json();
+    console.log("reformat-transcript data is:", data);
+    // return just the content of the response, which is the plain text report
+    formattedReport = data.choices[0].message.content;
+    console.log('done making reports : )!')
+    console.log('formattedReport is', formattedReport)
+    return data.choices[0].message.content;
+  } catch (error) {
+    throw error;
+  }
 }
 
 // Event listener for the reformat button
@@ -98,6 +102,7 @@ document
     const content =
       fullTranscription.innerText || fullTranscription.textContent || "";
     if (content) {
+      console.log('content is:', content);
       const gptResponse = await chatWithGPT(content);
       gptResponseEl.innerHTML = gptResponse; // Displaying the response from ChatGPT-4
     } else {
