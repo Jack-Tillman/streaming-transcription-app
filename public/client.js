@@ -2,10 +2,13 @@
 const captions = window.document.getElementById("captions");
 const fullTranscription = window.document.getElementById("full-transcription");
 const fullJson = window.document.getElementById("json-response");
+const fulLBetter = window.document.getElementById("full-better");
+const fullEhr = window.document.getElementById("full-ehr");
 
 const gptResponseEl = document.getElementById("gpt-response");
 const jsonResponseEl = document.getElementById("json-response");
-let transcriptionArray = [];
+const betterResponseEl = document.getElementById("better-response");
+const ehrResponseEl = document.getElementById("ehr-response");
 
 /* Microphone functions */
 
@@ -78,7 +81,7 @@ async function processTranscription(transcription) {
 }
 
 let formattedReport = "";
-let currentJson = '';
+let currentJson = "";
 /* send request to GPT-4 to format data into a radiology report */
 async function chatWithGPT(content) {
   try {
@@ -127,6 +130,66 @@ async function jsonGPT(content) {
   }
 }
 
+/* send request to Better to get token */
+async function getBetterToken() {
+  try {
+    console.log("time to get the token");
+    const response = await fetch("/api/token", {
+      method: "POST",
+      headers: {
+        Allow: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    console.log("access token is:", data.access_token);
+    console.log("done getting access token : )!");
+    return data.access_token;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function makeComposition(token) {
+  try {
+    //token exists here
+    const raw = JSON.stringify({
+      "ctx/language": "en",
+      "ctx/territory": "SI",
+      "ctx/composer_name": "JackT",
+      "radiology-report/imaging_examination_result:0/any_event:0/exam":
+        "MARCH 29 TEST",
+      "radiology-report/imaging_examination_result:0/any_event:0/technique":
+        "MARCH 29 TEST",
+      "radiology-report/imaging_examination_result:0/any_event:0/imaging_examination_of_a_body_structure:0/body_structure":
+        "MARCH 29 TEST",
+      "radiology-report/imaging_examination_result:0/any_event:0/comparison":
+        "MARCH 29 TEST",
+      "radiology-report/imaging_examination_result:0/any_event:0/imaging_findings":
+        "MARCH 29 TEST",
+      "radiology-report/imaging_examination_result:0/any_event:0/impression":
+        "MARCH 29 TEST",
+    });
+
+    const response = await fetch("/api/post", {
+      method: "POST",
+      headers: {
+        Allow: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+      body: `${raw}`,
+    });
+    const data = await response.json();
+    console.log("client 181 makeComp data is :", data);
+    console.log("client done making comp : )!");
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 // Event listener for the reformat button
 document
   .getElementById("reformat-button")
@@ -144,14 +207,41 @@ document
 
 // Event listener for the json button
 document.getElementById("json-button").addEventListener("click", async () => {
-  const content =
-    gptResponseEl.innerText || gptResponseEl.textContent || "";
+  const content = gptResponseEl.innerText || gptResponseEl.textContent || "";
   if (content) {
     console.log("JSON content is:", content);
     const gptResponse = await jsonGPT(content);
     jsonResponseEl.innerHTML = gptResponse; // Displaying the response from ChatGPT-4
   } else {
     console.log("waiting for JSON");
+  }
+});
+
+// Event listener for the insert button
+// Retrieve access token -> make call to post new composition
+document.getElementById("insert-button").addEventListener("click", async () => {
+  try {
+    console.log("requesting token");
+    const betterResponse = await getBetterToken();
+    const token = await betterResponse.access_token;
+    betterResponseEl.innerHTML = "Token retrieved!"; // Displaying the response from Better
+  } catch (error) {
+    throw error;
+  }
+});
+
+// make call-> make call to post new composition
+document.getElementById("ehr-button").addEventListener("click", async () => {
+  try {
+    console.log("requesting token");
+    const token = await getBetterToken();
+
+    console.log("240 client token is", token);
+    const ehrResponse = await makeComposition(token);
+    ehrResponseEl.innerHTML = ehrResponse;
+    betterResponseEl.innerHTML = "Inserted  ehr!"; // Displaying the response from Better
+  } catch (error) {
+    throw error;
   }
 });
 
