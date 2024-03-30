@@ -1,4 +1,5 @@
-// const fetch = require("node-fetch");
+import {transformRadiologyReport, getBetterToken, makeComposition} from "/utils.js";
+
 const captions = window.document.getElementById("captions");
 const fullTranscription = window.document.getElementById("full-transcription");
 const fullJson = window.document.getElementById("json-response");
@@ -71,42 +72,6 @@ async function start(socket) {
   });
 }
 
-/* HELPER FUNCTIONS */
-
-function transformRadiologyReport(inputReport) {
-  const targetReport = {
-    "ctx/language": "en",
-    "ctx/territory": "SI",
-    "ctx/composer_name": "JackT",
-  };
-
-  const keyMap = {
-    exam: "radiology-report/imaging_examination_result:0/any_event:0/exam",
-    technique:
-      "radiology-report/imaging_examination_result:0/any_event:0/technique",
-    history:
-      "radiology-report/imaging_examination_result:0/any_event:0/imaging_examination_of_a_body_structure:0/body_structure",
-    comparison:
-      "radiology-report/imaging_examination_result:0/any_event:0/comparison",
-    findings:
-      "radiology-report/imaging_examination_result:0/any_event:0/imaging_findings",
-    impressions:
-      "radiology-report/imaging_examination_result:0/any_event:0/impression",
-  };
-
-  // map over input keys to insert into target report
-  Object.keys(inputReport).forEach((key) => {
-    const newKey = keyMap[key];
-    if (newKey) {
-      targetReport[newKey] = inputReport[key];
-    }
-  });
-
-  return targetReport;
-}
-
-/* GPT functions */
-
 /* called after each spoken chunk to make full transcription */
 async function processTranscription(transcription) {
   // Update fullTranscription to include each chunk
@@ -155,57 +120,6 @@ async function jsonGPT(content) {
   }
 }
 
-/* send request to Better to get token */
-async function getBetterToken() {
-  try {
-    console.log("time to get the token");
-    const response = await fetch("/api/token", {
-      method: "POST",
-      headers: {
-        Allow: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    //likely error thrower
-    if (!response.ok) throw new Error('Failed to refresh token.');
-    
-    const data = await response.json();
-    console.log("done getting access token : )!");
-    return data.access_token;
-  } catch (error) {
-    throw error;
-  }
-}
-
-async function makeComposition(token, jsonString) {
-  try {
-    const inputObject = JSON.parse(jsonString);
-    console.log("inputObject is", inputObject);
-    console.log(typeof inputObject);
-    //convert to target json fields for ehr insertion
-    const targetInput = transformRadiologyReport(inputObject);
-    console.log("targetInput is", targetInput);
-    console.log(typeof targetInput);
-
-    const raw = JSON.stringify(targetInput);
-
-    const response = await fetch("/api/post", {
-      method: "POST",
-      headers: {
-        Allow: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `${token}`,
-      },
-      body: `${raw}`,
-    });
-    const data = await response.json();
-    console.log("client 181 makeComp data is :", data);
-    console.log("client done making comp : )!");
-    return data;
-  } catch (error) {
-    throw error;
-  }
-}
 
 /* EVENT LISTENERS */
 
@@ -216,7 +130,6 @@ document
     const content =
       fullTranscription.innerText || fullTranscription.textContent || "";
     if (content) {
-      console.log("content is:", content);
       const gptResponse = await chatWithGPT(content);
       gptResponseEl.innerHTML = gptResponse; // Displaying the response from ChatGPT-4
     } else {
@@ -228,24 +141,10 @@ document
 document.getElementById("json-button").addEventListener("click", async () => {
   const content = gptResponseEl.innerText || gptResponseEl.textContent || "";
   if (content) {
-    console.log("JSON content is:", content);
     const gptResponse = await jsonGPT(content);
     jsonResponseEl.innerHTML = gptResponse; // Displaying the response from ChatGPT-4
   } else {
     console.log("waiting for JSON");
-  }
-});
-
-// Event listener for the insert button
-// Retrieve access token -> make call to post new composition
-document.getElementById("insert-button").addEventListener("click", async () => {
-  try {
-    console.log("requesting token");
-    const betterResponse = await getBetterToken();
-    const token = await betterResponse.access_token;
-    betterResponseEl.innerHTML = "Token retrieved!"; // Displaying the response from Better
-  } catch (error) {
-    throw error;
   }
 });
 
@@ -256,10 +155,6 @@ document.getElementById("ehr-button").addEventListener("click", async () => {
   try {
     if (dataToInsert) {
       const jsonString = jsonResponseEl.innerText;
-      console.log("jsonString is:", jsonString);
-      console.log(typeof jsonString);
-      console.log("requesting token");
-
       const token = await getBetterToken();
       const ehrResponse = await makeComposition(token, jsonString);
 

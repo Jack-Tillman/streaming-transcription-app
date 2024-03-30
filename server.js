@@ -4,9 +4,9 @@ const WebSocket = require("ws");
 const fetch = require("node-fetch");
 const { createClient, LiveTranscriptionEvents } = require("@deepgram/sdk");
 const dotenv = require("dotenv");
-const { getToken } = require("./public/betterutils");
 dotenv.config();
 const { OPENAI_API_KEY, BETTERUSER, BETTERPASS } = process.env;
+
 
 const app = express();
 const server = http.createServer(app);
@@ -15,26 +15,8 @@ const wss = new WebSocket.Server({ server });
 const deepgramClient = createClient(process.env.DEEPGRAM_API_KEY);
 let keepAlive;
 
-/* USED FOR BETTER API CALLS TO GET TOKEN*/
-
-const loginHeaders = new Headers();
-loginHeaders.append("Allow", "application/json");
-loginHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-
-const urlencoded = new URLSearchParams();
-urlencoded.append("grant_type", "password");
-urlencoded.append("client_id", "portal");
-urlencoded.append("username", `${BETTERUSER}`);
-urlencoded.append("password", `${BETTERPASS}`);
-
-const requestOptionsLogin = {
-  method: "POST",
-  headers: loginHeaders,
-  body: urlencoded,
-  redirect: "follow",
-};
-
 /* DEEPGRAM SET UP */
+
 const setupDeepgram = (ws) => {
   const deepgram = deepgramClient.listen.live({
     language: "en",
@@ -116,13 +98,15 @@ wss.on("connection", (ws) => {
   });
 });
 
-/* APP */
+/* APP USE & GET */
 
-app.use(express.static("public/"));
+app.use(express.static(__dirname + "/public/"));
 app.use(express.json());
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
+  res.sendFile("index.html", { root: __dirname + "/public/" });
 });
+
+/* APP POST */
 
 /* API call to GPT-4 to format content into report */
 app.post("/api/createReport", async (req, res) => {
@@ -201,10 +185,25 @@ app.post("/api/createJson", async (req, res) => {
   }
 });
 
-
 /* API call to Better to get access token */
 app.post("/api/token", async (req, res) => {
   try {
+    const loginHeaders = new Headers();
+    loginHeaders.append("Allow", "application/json");
+    loginHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    const urlencoded = new URLSearchParams();
+    urlencoded.append("grant_type", "password");
+    urlencoded.append("client_id", "portal");
+    urlencoded.append("username", `${BETTERUSER}`);
+    urlencoded.append("password", `${BETTERPASS}`);
+
+    const requestOptionsLogin = {
+      method: "POST",
+      headers: loginHeaders,
+      body: urlencoded,
+      redirect: "follow",
+    };
     const response = await fetch(
       "https://sandbox.better.care/auth/realms/portal/protocol/openid-connect/token",
       requestOptionsLogin
