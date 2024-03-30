@@ -71,6 +71,40 @@ async function start(socket) {
   });
 }
 
+/* HELPER FUNCTIONS */
+
+function transformRadiologyReport(inputReport) {
+  const targetReport = {
+    "ctx/language": "en",
+    "ctx/territory": "SI",
+    "ctx/composer_name": "JackT",
+  };
+
+  const keyMap = {
+    exam: "radiology-report/imaging_examination_result:0/any_event:0/exam",
+    technique:
+      "radiology-report/imaging_examination_result:0/any_event:0/technique",
+    history:
+      "radiology-report/imaging_examination_result:0/any_event:0/imaging_examination_of_a_body_structure:0/body_structure",
+    comparison:
+      "radiology-report/imaging_examination_result:0/any_event:0/comparison",
+    findings:
+      "radiology-report/imaging_examination_result:0/any_event:0/imaging_findings",
+    impressions:
+      "radiology-report/imaging_examination_result:0/any_event:0/impression",
+  };
+
+  // map over input keys to insert into target report
+  Object.keys(inputReport).forEach((key) => {
+    const newKey = keyMap[key];
+    if (newKey) {
+      targetReport[newKey] = inputReport[key];
+    }
+  });
+
+  return targetReport;
+}
+
 /* GPT functions */
 
 /* called after each spoken chunk to make full transcription */
@@ -143,7 +177,6 @@ async function getBetterToken() {
     });
 
     const data = await response.json();
-    console.log("access token is:", data.access_token);
     console.log("done getting access token : )!");
     return data.access_token;
   } catch (error) {
@@ -151,26 +184,34 @@ async function getBetterToken() {
   }
 }
 
-async function makeComposition(token) {
+async function makeComposition(token, jsonString) {
   try {
-    //token exists here
-    const raw = JSON.stringify({
-      "ctx/language": "en",
-      "ctx/territory": "SI",
-      "ctx/composer_name": "JackT",
-      "radiology-report/imaging_examination_result:0/any_event:0/exam":
-        "MARCH 29 TEST",
-      "radiology-report/imaging_examination_result:0/any_event:0/technique":
-        "MARCH 29 TEST",
-      "radiology-report/imaging_examination_result:0/any_event:0/imaging_examination_of_a_body_structure:0/body_structure":
-        "MARCH 29 TEST",
-      "radiology-report/imaging_examination_result:0/any_event:0/comparison":
-        "MARCH 29 TEST",
-      "radiology-report/imaging_examination_result:0/any_event:0/imaging_findings":
-        "MARCH 29 TEST",
-      "radiology-report/imaging_examination_result:0/any_event:0/impression":
-        "MARCH 29 TEST",
-    });
+    const inputObject = JSON.parse(jsonString);
+    console.log("inputObject is", inputObject)
+    console.log(typeof inputObject);
+    //convert to target json fields for ehr insertion
+    const targetInput = transformRadiologyReport(inputObject);
+    console.log('targetInput is', targetInput);
+    console.log(typeof targetInput);
+
+    const raw = JSON.stringify(targetInput)
+    // const raw = JSON.stringify({
+    //   "ctx/language": "en",
+    //   "ctx/territory": "SI",
+    //   "ctx/composer_name": "JackT",
+    //   "radiology-report/imaging_examination_result:0/any_event:0/exam":
+    //     "Lumbar spine radiology examination.",
+    //   "radiology-report/imaging_examination_result:0/any_event:0/imaging_examination_of_a_body_structure:0/body_structure":
+    //     "Not available.",
+    //   "radiology-report/imaging_examination_result:0/any_event:0/technique":
+    //     "Standard antero, posterior, and lateral views of the lumbar spine obtained.",
+    //   "radiology-report/imaging_examination_result:0/any_event:0/comparison":
+    //     "None.",
+    //   "radiology-report/imaging_examination_result:0/any_event:0/imaging_findings":
+    //     "Mild reduction of disc height at T12-L1. Presence of Schmorl's nodes within the superior end plates of L1 and L2. No acute fracture identified.",
+    //   "radiology-report/imaging_examination_result:0/any_event:0/impression":
+    //     "Evidence of mild disc height reduction at T12-L1. Presence of Schmorl's nodes in L1 and L2. Normal bone density. Possible agenesis or hypoplasia of 12 ribs bilaterally.",
+    // });
 
     const response = await fetch("/api/post", {
       method: "POST",
@@ -189,6 +230,8 @@ async function makeComposition(token) {
     throw error;
   }
 }
+
+/* EVENT LISTENERS */
 
 // Event listener for the reformat button
 document
@@ -232,14 +275,23 @@ document.getElementById("insert-button").addEventListener("click", async () => {
 
 // make call-> make call to post new composition
 document.getElementById("ehr-button").addEventListener("click", async () => {
+  const dataToInsert =
+    jsonResponseEl.innerText || jsonResponseEl.textContent || "";
   try {
-    console.log("requesting token");
-    const token = await getBetterToken();
+    if (dataToInsert) {
+      const jsonString = jsonResponseEl.innerText;
+      console.log("jsonString is:", jsonString);
+      console.log(typeof jsonString);
+      console.log("requesting token");
 
-    console.log("240 client token is", token);
-    const ehrResponse = await makeComposition(token);
-    ehrResponseEl.innerHTML = ehrResponse;
-    betterResponseEl.innerHTML = "Inserted  ehr!"; // Displaying the response from Better
+      const token = await getBetterToken();
+      const ehrResponse = await makeComposition(token, jsonString);
+
+      ehrResponseEl.innerHTML = ehrResponse;
+      betterResponseEl.innerHTML = "Inserted  ehr!"; // Displaying the response from Better
+    } else {
+      console.log("waiting for JSON to insert");
+    }
   } catch (error) {
     throw error;
   }
