@@ -114,28 +114,24 @@ async function processTranscription(transcription) {
   console.log("Updated full transcription:", transcription);
 }
 
-let formattedReport = "";
-let currentJson = "";
 /* send request to GPT-4 to format data into a radiology report */
 async function chatWithGPT(content) {
   try {
     console.log("time to make the report");
     const response = await fetch("/api/createReport", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ content: content }),
     });
+    //likely error thrower
+    if (!response.ok) throw new Error("Network response was not ok.");
 
     const data = await response.json();
-    console.log("reformat-transcript data is:", data);
-    // return just the content of the response, which is the plain text report
-    formattedReport = data.choices[0].message.content;
     console.log("done making reports : )!");
-    console.log("formattedReport is", formattedReport);
     return data.choices[0].message.content;
+
   } catch (error) {
+    console.error("Error during chat:", error);
     throw error;
   }
 }
@@ -146,19 +142,14 @@ async function jsonGPT(content) {
     console.log("time to make the json");
     const response = await fetch("/api/createJson", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json"},
       body: JSON.stringify({ content: content }),
     });
 
     const data = await response.json();
-    console.log("json client data is:", data);
-    // return just the content of the response, which is the plain text report
-    currentJson = data.choices[0].message.content;
     console.log("done making json : )!");
-    console.log("currentJson is", currentJson);
     return data.choices[0].message.content;
+
   } catch (error) {
     throw error;
   }
@@ -175,7 +166,9 @@ async function getBetterToken() {
         "Content-Type": "application/json",
       },
     });
-
+    //likely error thrower
+    if (!response.ok) throw new Error('Failed to refresh token.');
+    
     const data = await response.json();
     console.log("done getting access token : )!");
     return data.access_token;
@@ -187,31 +180,14 @@ async function getBetterToken() {
 async function makeComposition(token, jsonString) {
   try {
     const inputObject = JSON.parse(jsonString);
-    console.log("inputObject is", inputObject)
+    console.log("inputObject is", inputObject);
     console.log(typeof inputObject);
     //convert to target json fields for ehr insertion
     const targetInput = transformRadiologyReport(inputObject);
-    console.log('targetInput is', targetInput);
+    console.log("targetInput is", targetInput);
     console.log(typeof targetInput);
 
-    const raw = JSON.stringify(targetInput)
-    // const raw = JSON.stringify({
-    //   "ctx/language": "en",
-    //   "ctx/territory": "SI",
-    //   "ctx/composer_name": "JackT",
-    //   "radiology-report/imaging_examination_result:0/any_event:0/exam":
-    //     "Lumbar spine radiology examination.",
-    //   "radiology-report/imaging_examination_result:0/any_event:0/imaging_examination_of_a_body_structure:0/body_structure":
-    //     "Not available.",
-    //   "radiology-report/imaging_examination_result:0/any_event:0/technique":
-    //     "Standard antero, posterior, and lateral views of the lumbar spine obtained.",
-    //   "radiology-report/imaging_examination_result:0/any_event:0/comparison":
-    //     "None.",
-    //   "radiology-report/imaging_examination_result:0/any_event:0/imaging_findings":
-    //     "Mild reduction of disc height at T12-L1. Presence of Schmorl's nodes within the superior end plates of L1 and L2. No acute fracture identified.",
-    //   "radiology-report/imaging_examination_result:0/any_event:0/impression":
-    //     "Evidence of mild disc height reduction at T12-L1. Presence of Schmorl's nodes in L1 and L2. Normal bone density. Possible agenesis or hypoplasia of 12 ribs bilaterally.",
-    // });
+    const raw = JSON.stringify(targetInput);
 
     const response = await fetch("/api/post", {
       method: "POST",
