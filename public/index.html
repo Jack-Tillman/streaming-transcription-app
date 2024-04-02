@@ -3,14 +3,34 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Deepgram Test</title>
+  <title>Radiology Report Formatter and Inserter Demo</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body class="">
+  <!-- <h1>Captions by Deepgram</h1> -->
+  <div class="captions" id="captions">
+    <span id="realtime-caption">Your speech shows up here</span>
+  </div>
+  <div class="full-transcription">
+    <h2 id="left-h2">Full Transcription Below</h2>
+    <span class="full-transcription" id="full-transcription"></span>
+  </div>
+  <div class="response-container" id="response-container">
+
+    <span class="response-div" id="gpt-response">
+    </span>
+    <span class="response-div" id="json-response"></span>
+    <span class="response-div" id="better-response"></span>
+    <span class="response-div" id="ehr-response"></span>
+  </div>
+  <div class="button-container">
+    <button class="info-button reformat-button" id="reformat-button" target="_blank">Make Report</button>
+    <button class="info-button json-button" id="json-button" target="_blank">Make JSON</button>
+    <button class="info-button ehr-button" id="ehr-button" target="_blank">Insert ehr</button>
+  </div>
   <div class="content">
-    <img class="click" src="click.png" />
     <div class="button-container">
       <input type="checkbox" id="record" class="mic-checkbox" />
       <label for="record" class="mic-button">
@@ -24,34 +44,6 @@
         </div>
       </label>
     </div>
-  </div>
-  <h1>Captions by Deepgram</h1>
-  <div class="captions" id="captions">
-    <span>Realtime speech transcription API</span>
-  </div>
-  <div class="full-transcription" id="full-transcription">
-    <span>Full Transcription Below</span>
-    <span></span>
-  </div>
-  <div class="full-json" id="full-json">
-    <span></span>
-  </div>
-  <div class="full-better" id="full-better">
-    <span></span>
-  </div>
-  <div class="full-ehr" id="full-ehr">
-    <span></span>
-  </div>
-  <div class="button-container">
-    <button class="info-button reformat-button" id="reformat-button" target="_blank">Make Report</button>
-    <button class="info-button json-button" id="json-button" target="_blank">Make JSON</button>
-    <button class="info-button ehr-button" id="ehr-button" target="_blank">Insert ehr</button>
-  </div>
-  <div class="response-container" id="response-container">
-    <div class="response-div" id="gpt-response"></div>
-    <div class="response-div" id="json-response"></div>
-    <div class="response-div" id="better-response"></div>
-    <div class="response-div" id="ehr-response"></div>
   </div>
 
   <script type="module" src="client.js"></script>

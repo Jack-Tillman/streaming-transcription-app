@@ -2,6 +2,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Arimo:wght@400;600;700");
 @import url("https://fonts.googleapis.com/css2?family=Inter");
 
+html {
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   color: white;
   display: flex;
@@ -9,23 +17,25 @@ body {
   font-family: "Inter", sans-serif;
   justify-content: center;
   flex-direction: column;
-  height: 90vh;
+  height: 80vh;
   background-color: #000;
   padding-top: 100px;
 }
+/* content includes microphone button and captions*/
 
 .content {
   display: flex;
-  height: 30vh;
+  height: 20vh;
   position: relative;
   align-items: center;
+  margin-top:2rem;
 }
 
 .mic-checkbox {
   display: none;
 }
 
-.mic-checkbox:checked + .mic-button {
+.mic-checkbox:checked+.mic-button {
   transform: rotateY(180deg);
 }
 
@@ -83,7 +93,7 @@ body {
   left: -101px;
 }
 
-.mic-checkbox:checked + .mic-button > .mic > .mic-button-loader {
+.mic-checkbox:checked+.mic-button>.mic>.mic-button-loader {
   border-top: 2.5px solid #13ef95;
   border-radius: 100%;
   animation: borderLoader 1.3s 0.2s ease-in-out infinite;
@@ -139,6 +149,7 @@ body {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(359deg);
   }
@@ -152,6 +163,11 @@ body {
   text-align: center;
 }
 
+#realtime-caption {
+  color:rgb(40, 155, 255);
+  font-size:32px;
+}
+
 h1 {
   font-family: "Arimo", sans-serif;
   font-size: 40px;
@@ -163,6 +179,8 @@ h1 {
 
 .button-container {
   display: flex;
+  justify-content: center;
+  margin-bottom:5rem;
   gap: 16px;
 }
 
@@ -200,40 +218,44 @@ h1 {
   z-index: -1;
 }
 
-.docs {
-  background-color: white;
+.full-transcription {
+  display:flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  max-width:50vw;
+  max-height:70vh;
+  justify-content: flex-end;
+  padding-top: 1rem;
 }
 
-.docs::after {
-  font-family: FontAwesome;
-  font-weight: 900;
-  content: "\f061";
-  margin-right: -4px;
-  margin-left: 8px;
+#left-h2 {
+margin:0 auto;
+padding-bottom: 1rem;
 }
 
-.click {
-  position: absolute;
-  height: 150px;
-  left: 20px;
-  top: -144px;
+#response-container {
+  display:flex;
+  gap:16px;
 }
+
 
 #gpt-response {
-  height:auto;
-  width: 800px;
+  height: auto;
+  width: 30rem;
   margin: 0;
   padding: 1rem;
 }
 
 #json-response {
-  height:auto;
+  height: auto;
   width: 800px;
   margin: 0;
   padding: 1rem;
 }
 
-#reformat-button, #json-button, #insert-button {
+#reformat-button,
+#json-button,
+#insert-button {
   color: white;
   position: relative;
   background-origin: border-box;

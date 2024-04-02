@@ -27,7 +27,7 @@ const setupDeepgram = (ws) => {
 
   if (keepAlive) clearInterval(keepAlive);
   keepAlive = setInterval(() => {
-    console.log("deepgram: keepalive");
+    // console.log("deepgram: keepalive");
     deepgram.keepAlive();
   }, 10 * 1000);
 
@@ -112,7 +112,7 @@ app.get("/", (req, res) => {
 app.post("/api/createReport", async (req, res) => {
   try {
     const { content } = req.body;
-    console.log("server report content is:", content);
+    // console.log("server report content is:", content);
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -136,8 +136,13 @@ app.post("/api/createReport", async (req, res) => {
       }),
     });
     const data = await response.json();
-    console.log("server data is:", data);
-    console.log("server data.choices etc is", data.choices[0].message.content);
+    // console.log("server data is:", data);
+    console.log("Your radiology report:");
+    console.log("");
+    console.log("");
+    console.log("___");
+    console.log(data.choices[0].message.content)
+    console.log("___");
     res.json(data);
     // return just the content of the response, which is the plain text report
     return data.choices[0].message.content;
@@ -152,7 +157,7 @@ app.post("/api/createReport", async (req, res) => {
 app.post("/api/createJson", async (req, res) => {
   try {
     const { content } = req.body;
-    console.log("server json content is:", content);
+    // console.log("server json content is:", content);
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -176,6 +181,12 @@ app.post("/api/createJson", async (req, res) => {
       }),
     });
     const data = await response.json();
+    console.log("Your JSON:");
+    console.log("");
+    console.log("");
+    console.log("___");
+    console.log(data.choices[0].message.content)
+    console.log("___");
     res.json(data);
     // return just the content of the response, which is the plain text report
     return data.choices[0].message.content;

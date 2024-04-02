@@ -1,16 +1,20 @@
-import {transformRadiologyReport, getBetterToken, makeComposition} from "/utils.js";
+import {
+  transformRadiologyReport,
+  getBetterToken,
+  makeComposition,
+} from "/utils.js";
 
 const captions = window.document.getElementById("captions");
 const fullTranscription = window.document.getElementById("full-transcription");
 const fullJson = window.document.getElementById("json-response");
 const fulLBetter = window.document.getElementById("full-better");
 const fullEhr = window.document.getElementById("full-ehr");
+const returnHeader = window.document.getElementById("left-h2");
 
 const gptResponseEl = document.getElementById("gpt-response");
 const jsonResponseEl = document.getElementById("json-response");
 const betterResponseEl = document.getElementById("better-response");
 const ehrResponseEl = document.getElementById("ehr-response");
-
 /* Microphone functions */
 
 async function getMicrophone() {
@@ -76,7 +80,6 @@ async function start(socket) {
 async function processTranscription(transcription) {
   // Update fullTranscription to include each chunk
   fullTranscription.innerHTML += `<span>${transcription}</span><br>`;
-  console.log("Updated full transcription:", transcription);
 }
 
 /* send request to GPT-4 to format data into a radiology report */
@@ -94,9 +97,8 @@ async function chatWithGPT(content) {
     const data = await response.json();
     console.log("done making reports : )!");
     return data.choices[0].message.content;
-
   } catch (error) {
-    console.error("Error during chat:", error);
+    console.error("Error while making your report:", error);
     throw error;
   }
 }
@@ -107,19 +109,18 @@ async function jsonGPT(content) {
     console.log("time to make the json");
     const response = await fetch("/api/createJson", {
       method: "POST",
-      headers: { "Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ content: content }),
     });
 
     const data = await response.json();
     console.log("done making json : )!");
     return data.choices[0].message.content;
-
   } catch (error) {
+    console.error("Error while formatting your JSON data:", error)
     throw error;
   }
 }
-
 
 /* EVENT LISTENERS */
 
@@ -131,7 +132,9 @@ document
       fullTranscription.innerText || fullTranscription.textContent || "";
     if (content) {
       const gptResponse = await chatWithGPT(content);
-      gptResponseEl.innerHTML = gptResponse; // Displaying the response from ChatGPT-4
+      fullTranscription.innerText = await gptResponse; // Displaying the response from ChatGPT-4
+      returnHeader.innerText = "Radiology Report Below";
+      captions.innerHTML = '';
     } else {
       console.log("waiting for transcription");
     }
@@ -139,10 +142,14 @@ document
 
 // Event listener for the json button
 document.getElementById("json-button").addEventListener("click", async () => {
-  const content = gptResponseEl.innerText || gptResponseEl.textContent || "";
+  const content =
+    fullTranscription.innerText || fullTranscription.textContent || "";
   if (content) {
     const gptResponse = await jsonGPT(content);
-    jsonResponseEl.innerHTML = gptResponse; // Displaying the response from ChatGPT-4
+    fullTranscription.innerText = await gptResponse;
+    // jsonResponseEl.innerText = gptResponse; // Displaying the response from ChatGPT-4
+    // gptResponseEl.innerText = '';
+    returnHeader.innerText = "JSON Data Below";
   } else {
     console.log("waiting for JSON");
   }
@@ -151,15 +158,16 @@ document.getElementById("json-button").addEventListener("click", async () => {
 // make call-> make call to post new composition
 document.getElementById("ehr-button").addEventListener("click", async () => {
   const dataToInsert =
-    jsonResponseEl.innerText || jsonResponseEl.textContent || "";
+    fullTranscription.innerText || fullTranscription.textContent || "";
   try {
     if (dataToInsert) {
-      const jsonString = jsonResponseEl.innerText;
+      const jsonString = fullTranscription.innerText;
       const token = await getBetterToken();
       const ehrResponse = await makeComposition(token, jsonString);
 
-      ehrResponseEl.innerHTML = ehrResponse;
-      betterResponseEl.innerHTML = "Inserted  ehr!"; // Displaying the response from Better
+      fullTranscription.innerText = '';
+      returnHeader.innerText = "Data successfully inserted!";
+      // betterResponseEl.innerText = "Inserted  ehr!"; // Displaying the response from Better
     } else {
       console.log("waiting for JSON to insert");
     }
@@ -180,7 +188,7 @@ window.addEventListener("load", () => {
     const data = JSON.parse(event.data);
     if (data.channel.alternatives[0].transcript !== "") {
       captions.innerHTML = data
-        ? `<span>${data.channel.alternatives[0].transcript}</span>`
+        ? `<span id="realtime-caption">${data.channel.alternatives[0].transcript}</span>`
         : "";
       processTranscription(data.channel.alternatives[0].transcript);
     }
