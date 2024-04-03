@@ -38,7 +38,9 @@ export async function makeComposition(token, jsonString) {
       },
       body: `${raw}`,
     });
+    console.log("client repsonse is", response)
     const data = await response.json();
+    console.log("client data is", data)
     console.log("Composition inserted : )!");
     return data;
   } catch (error) {
@@ -55,17 +57,19 @@ export function transformRadiologyReport(inputReport) {
   };
 
   const keyMap = {
-    exam: "radiology-report/imaging_examination_result:0/any_event:0/exam",
+    exam: "full-radiology-report/imaging_examination_result:0/any_event:0/study_name",
     technique:
-      "radiology-report/imaging_examination_result:0/any_event:0/technique",
+    "full-radiology-report/imaging_examination_result:0/any_event:0/modality",
     history:
-      "radiology-report/imaging_examination_result:0/any_event:0/imaging_examination_of_a_body_structure:0/body_structure",
+    "full-radiology-report/imaging_examination_result:0/any_event:0/target_body_site",
     comparison:
-      "radiology-report/imaging_examination_result:0/any_event:0/comparison",
+    "full-radiology-report/imaging_examination_result:0/any_event:0/comparison_findings",
     findings:
-      "radiology-report/imaging_examination_result:0/any_event:0/imaging_findings",
+    "full-radiology-report/imaging_examination_result:0/any_event:0/imaging_findings",
     impressions:
-      "radiology-report/imaging_examination_result:0/any_event:0/impression",
+    "full-radiology-report/imaging_examination_result:0/any_event:0/overall_impression",
+    clinical_summary: 
+    "full-radiology-report/imaging_examination_result:0/any_event:0/clinical_summary",
   };
 
   // map over input keys to insert into target report

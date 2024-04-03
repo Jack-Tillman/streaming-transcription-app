@@ -147,8 +147,6 @@ document.getElementById("json-button").addEventListener("click", async () => {
   if (content) {
     const gptResponse = await jsonGPT(content);
     fullTranscription.innerText = await gptResponse;
-    // jsonResponseEl.innerText = gptResponse; // Displaying the response from ChatGPT-4
-    // gptResponseEl.innerText = '';
     returnHeader.innerText = "JSON Data Below";
   } else {
     console.log("waiting for JSON");
@@ -167,7 +165,6 @@ document.getElementById("ehr-button").addEventListener("click", async () => {
 
       fullTranscription.innerText = '';
       returnHeader.innerText = "Data successfully inserted!";
-      // betterResponseEl.innerText = "Inserted  ehr!"; // Displaying the response from Better
     } else {
       console.log("waiting for JSON to insert");
     }
