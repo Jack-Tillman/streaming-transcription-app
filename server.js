@@ -7,7 +7,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 const { OPENAI_API_KEY, BETTERUSER, BETTERPASS } = process.env;
 
-
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
@@ -141,7 +140,7 @@ app.post("/api/createReport", async (req, res) => {
     console.log("");
     console.log("");
     console.log("___");
-    console.log(data.choices[0].message.content)
+    console.log(data.choices[0].message.content);
     console.log("___");
     res.json(data);
     // return just the content of the response, which is the plain text report
@@ -185,7 +184,7 @@ app.post("/api/createJson", async (req, res) => {
     console.log("");
     console.log("");
     console.log("___");
-    console.log(data.choices[0].message.content)
+    console.log(data.choices[0].message.content);
     console.log("___");
     res.json(data);
     // return just the content of the response, which is the plain text report
@@ -251,6 +250,37 @@ app.post("/api/post", async (req, res) => {
       requestOptionsPost
     );
     const data = await response.json();
+    res.json(data);
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.post("/api/getComposition", async (req, res) => {
+  try {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Accept", "application/json");
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
+    const raw = JSON.stringify({
+      "ehrUids": [
+        "67b2c55e-60af-488a-a228-0ffec602e9ee",
+        "02e1aac1-ae7e-41e6-be9d-328855a51eeb"
+      ]
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+    const response = await fetch("https://sandbox.better.care/ehr/rest/v1/view/getMostRecentRadiologyComposition?limit=1", requestOptions);
+    const data = await response.json();
+    console.log("server data @ 283 is", data);
     res.json(data);
     return data;
   } catch (error) {

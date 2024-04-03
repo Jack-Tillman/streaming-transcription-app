@@ -122,6 +122,26 @@ async function jsonGPT(content) {
   }
 }
 
+async function showComposition(token){
+  try {
+    console.log("time to fetch the composition");
+    const response = await fetch("/api/getComposition", {
+      method: "POST",
+      headers: { "Accept": "application/json", "Content-Type": "application/json", "Authorization": `${token}`},
+    });
+
+    const data = await response.json();
+    console.log(response);
+    console.log("done fetching the most recent composition : )!");
+    console.log(data);
+    // return data.choices[0].message.content;
+    return;
+  } catch (error) {
+    console.error("Error while fetching most recent composition:", error)
+    throw error;
+  }
+}
+
 /* EVENT LISTENERS */
 
 // Event listener for the reformat button
@@ -162,9 +182,13 @@ document.getElementById("ehr-button").addEventListener("click", async () => {
       const jsonString = fullTranscription.innerText;
       const token = await getBetterToken();
       const ehrResponse = await makeComposition(token, jsonString);
+      const composition = await showComposition(token);
 
       fullTranscription.innerText = '';
       returnHeader.innerText = "Data successfully inserted!";
+      console.log('composition is', composition)
+      console.table(composition)
+      
     } else {
       console.log("waiting for JSON to insert");
     }
