@@ -1,8 +1,21 @@
+import { createRoot } from 'react-dom/client';
+
+// Clear the existing HTML content
+document.body.innerHTML = '<div id="app"></div>';
+
+// Render your React component instead
+const root = createRoot(document.getElementById('app'));
+root.render(<h1>Hello, world</h1>);
+
+
+
 import {
   transformRadiologyReport,
   getBetterToken,
   makeComposition,
 } from "./utils.js";
+
+
 
 const captions = window.document.getElementById("captions");
 const fullTranscription = window.document.getElementById("full-transcription");
@@ -172,6 +185,7 @@ document.getElementById("json-button").addEventListener("click", async () => {
     console.log("waiting for JSON");
   }
 });
+
 
 // make call-> make call to post new composition
 document.getElementById("ehr-button").addEventListener("click", async () => {

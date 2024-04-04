@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     "env": {
         "browser": true,
         "commonjs": true,
@@ -14,7 +14,7 @@ module.exports = {
                 ".eslintrc.{js,cjs}"
             ],
             "parserOptions": {
-                "sourceType": "script"
+                "sourceType": "module"
             }
         }
     ],

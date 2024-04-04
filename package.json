@@ -2,7 +2,7 @@
   "name": "live-node-starter",
   "version": "1.0.0",
   "type": "module",
-  "description": "A project to get up and running with Deepgram's livestream speech-to-text API",
+  "description": "An app that utilizes DeepGram's real-time transcription streaming, ChatGPT-4, and electronic health records hosted by Better to enable users to record and transcribe audio, convert the transcription to a report with Chat-GPT4, convert that report to JSON, and then insert it into an openEHR database.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -28,9 +28,15 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "openai": "^4.29.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "ws": "^8.16.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/preset-react": "^7.24.1",
+    "@types/gensync": "^1.0.4",
+    "@types/react-dom": "^18.2.24",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.29.1"
   }
