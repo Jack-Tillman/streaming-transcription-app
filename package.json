@@ -1,6 +1,7 @@
 {
   "name": "live-node-starter",
   "version": "1.0.0",
+  "type": "module",
   "description": "A project to get up and running with Deepgram's livestream speech-to-text API",
   "main": "server.js",
   "scripts": {
