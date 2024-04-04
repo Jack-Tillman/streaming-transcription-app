@@ -2,7 +2,7 @@ import {
   transformRadiologyReport,
   getBetterToken,
   makeComposition,
-} from "/utils.js";
+} from "./utils.js";
 
 const captions = window.document.getElementById("captions");
 const fullTranscription = window.document.getElementById("full-transcription");
@@ -175,8 +175,10 @@ document.getElementById("json-button").addEventListener("click", async () => {
 
 // make call-> make call to post new composition
 document.getElementById("ehr-button").addEventListener("click", async () => {
-  const dataToInsert =
-    fullTranscription.innerText || fullTranscription.textContent || "";
+  // const dataToInsert =
+  //   fullTranscription.innerText || fullTranscription.textContent || "";
+  const dataToInsert = `{"exam": "Lumbar Spine Radiograph", "history": "Patient complaints of low back pain.", "technique": "Radiograph", "comparison": "Radiograph from March 6, 2022.", "findings": "1. Mild convexity of the lower lumbar on the right side. 2. Apex at L4-5. 3. List of the upper lumbar spine to the left side, extending cephalically to T12.", "impressions": "1. Mild curvature of the lower lumbar spine to the right, corresponding with patient's reported low back pain.", "clinical_summary": "EXAM: Lumbar Spine Radiograph. HISTORY: Patient complaints of low back pain. TECHNIQUE: Radiograph. COMPARISON: Radiograph from March 6, 2022. FINDINGS: 1. Mild convexity of the lower lumbar on the right side. 2. Apex at L4-5. 3. List of the upper lumbar spine to the left side, extending cephalically to T12. IMPRESSIONS: 1. Mild curvature of the lower lumbar spine to the right, corresponding with patient's reported low back pain."}`
+
   try {
     if (dataToInsert) {
       const jsonString = fullTranscription.innerText;
