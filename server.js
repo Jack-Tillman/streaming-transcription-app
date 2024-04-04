@@ -1,15 +1,18 @@
-const express = require("express");
-const http = require("http");
-const WebSocket = require("ws");
-const fetch = require("node-fetch");
-const { createClient, LiveTranscriptionEvents } = require("@deepgram/sdk");
-const dotenv = require("dotenv");
+import express from 'express';
+import http from 'http';
+import WebSocket, { WebSocketServer } from 'ws';
+import fetch from 'node-fetch';
+import { createClient, LiveTranscriptionEvents } from '@deepgram/sdk';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 dotenv.config();
 const { OPENAI_API_KEY, BETTERUSER, BETTERPASS } = process.env;
 
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocketServer({ server });
 
 const deepgramClient = createClient(process.env.DEEPGRAM_API_KEY);
 let keepAlive;
@@ -98,8 +101,10 @@ wss.on("connection", (ws) => {
 });
 
 /* APP USE & GET */
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-app.use(express.static(__dirname + "/public/"));
+app.use(express.static(__dirname + "/public/")); 
 app.use(express.json());
 app.get("/", (req, res) => {
   res.sendFile("index.html", { root: __dirname + "/public/" });
@@ -220,7 +225,7 @@ app.post("/api/token", async (req, res) => {
     );
     const data = await response.json();
     res.json(data);
-    token = data.access_token;
+    let token = data.access_token;
     return token;
   } catch (error) {
     console.error("Error:", error);
@@ -233,11 +238,12 @@ app.post("/api/token", async (req, res) => {
 app.post("/api/post", async (req, res) => {
   try {
     const body = JSON.stringify(req.body);
+    const authorization = req.headers.authorization;
 
     const postHeaders = new Headers();
     postHeaders.append("Accept", "application/json");
     postHeaders.append("Content-Type", "application/json");
-    postHeaders.append("Authorization", `Bearer ${token}`);
+    postHeaders.append("Authorization", `${authorization}`);
 
     const requestOptionsPost = {
       method: "POST",
@@ -260,10 +266,12 @@ app.post("/api/post", async (req, res) => {
 
 app.post("/api/getComposition", async (req, res) => {
   try {
+    const authorization = req.headers.authorization;
+
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Accept", "application/json");
-    myHeaders.append("Authorization", `Bearer ${token}`);
+    myHeaders.append("Authorization", `Bearer ${authorization}`);
 
     const raw = JSON.stringify({
       "ehrUids": [
@@ -278,9 +286,9 @@ app.post("/api/getComposition", async (req, res) => {
       body: raw,
       redirect: "follow"
     };
+
     const response = await fetch("https://sandbox.better.care/ehr/rest/v1/view/getMostRecentRadiologyComposition?limit=1", requestOptions);
     const data = await response.json();
-    console.log("server data @ 283 is", data);
     res.json(data);
     return data;
   } catch (error) {

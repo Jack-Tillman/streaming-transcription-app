@@ -26,7 +26,6 @@ export async function makeComposition(token, jsonString) {
     const inputObject = JSON.parse(jsonString);
     //convert to target json fields for ehr insertion
     const targetInput = transformRadiologyReport(inputObject);
-
     const raw = JSON.stringify(targetInput);
 
     const response = await fetch("/api/post", {
@@ -34,7 +33,7 @@ export async function makeComposition(token, jsonString) {
       headers: {
         Allow: "application/json",
         "Content-Type": "application/json",
-        Authorization: `${token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: `${raw}`,
     });

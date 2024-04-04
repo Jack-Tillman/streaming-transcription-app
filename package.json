@@ -1,6 +1,7 @@
 {
   "name": "live-node-starter",
   "version": "1.0.0",
+  "type": "module",
   "description": "A project to get up and running with Deepgram's livestream speech-to-text API",
   "main": "server.js",
   "scripts": {
@@ -28,5 +29,9 @@
     "express": "^4.18.2",
     "openai": "^4.29.2",
     "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.29.1"
   }
 }
