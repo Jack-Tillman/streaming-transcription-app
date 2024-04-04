@@ -238,11 +238,12 @@ app.post("/api/token", async (req, res) => {
 app.post("/api/post", async (req, res) => {
   try {
     const body = JSON.stringify(req.body);
+    const authorization = req.headers.authorization;
 
     const postHeaders = new Headers();
     postHeaders.append("Accept", "application/json");
     postHeaders.append("Content-Type", "application/json");
-    postHeaders.append("Authorization", `Bearer ${token}`);
+    postHeaders.append("Authorization", `${authorization}`);
 
     const requestOptionsPost = {
       method: "POST",
@@ -265,10 +266,12 @@ app.post("/api/post", async (req, res) => {
 
 app.post("/api/getComposition", async (req, res) => {
   try {
+    const authorization = req.headers.authorization;
+
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Accept", "application/json");
-    myHeaders.append("Authorization", `Bearer ${token}`);
+    myHeaders.append("Authorization", `Bearer ${authorization}`);
 
     const raw = JSON.stringify({
       "ehrUids": [
@@ -283,10 +286,9 @@ app.post("/api/getComposition", async (req, res) => {
       body: raw,
       redirect: "follow"
     };
-    
+
     const response = await fetch("https://sandbox.better.care/ehr/rest/v1/view/getMostRecentRadiologyComposition?limit=1", requestOptions);
     const data = await response.json();
-    console.log("server data @ 283 is", data);
     res.json(data);
     return data;
   } catch (error) {
