@@ -1,8 +1,10 @@
+
+
 import {
   transformRadiologyReport,
   getBetterToken,
   makeComposition,
-} from "./utils.js";
+} from "../client/src/utils/utils.js";
 
 const captions = window.document.getElementById("captions");
 const fullTranscription = window.document.getElementById("full-transcription");
@@ -15,6 +17,7 @@ const gptResponseEl = document.getElementById("gpt-response");
 const jsonResponseEl = document.getElementById("json-response");
 const betterResponseEl = document.getElementById("better-response");
 const ehrResponseEl = document.getElementById("ehr-response");
+
 /* Microphone functions */
 
 async function getMicrophone() {
