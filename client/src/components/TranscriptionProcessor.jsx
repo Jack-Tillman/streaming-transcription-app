@@ -1,8 +1,29 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
+import InsertData from "./InsertData";
+
+const ShowReport = ({ report }) => {
+  // let content = report;
+  console.log("report  is:", report);
+  return (
+    <>
+      <div className="full-report">{report}</div>
+    </>
+  );
+};
+
+const ShowJson = ({ json }) => {
+  console.log("json is:", json);
+  return (
+    <>
+      <div className="full-json">{json}</div>
+      <InsertData jsonString={json} />
+    </>
+  );
+};
 
 const TranscriptionProcessor = ({ fullTranscription }) => {
-    const [report, setReport] = useState("");
-    const [json, setJson] = useState("");
+  const [report, setReport] = useState("");
+  const [json, setJson] = useState("");
 
   const chatWithGPT = async (content) => {
     try {
@@ -13,13 +34,12 @@ const TranscriptionProcessor = ({ fullTranscription }) => {
       });
       if (!response.ok) throw new Error("Network response was not ok.");
       const data = await response.json();
-      if (data){
+      if (data) {
         setReport(data.choices[0].message.content);
       } else {
-        console.error("Error while setting your report.")
+        console.error("Error while setting your report.");
       }
       console.log("Report creation successful:", data);
-
     } catch (error) {
       console.error("Error while making your report:", error);
     }
@@ -35,10 +55,10 @@ const TranscriptionProcessor = ({ fullTranscription }) => {
       });
       const data = await response.json();
       console.log("JSON creation successful:", data);
-      if (data){
+      if (data) {
         setJson(data.choices[0].message.content);
       } else {
-        console.error("Error while setting json.")
+        console.error("Error while setting json.");
       }
       // Assuming you want to do something with the response data here
     } catch (error) {
@@ -54,9 +74,15 @@ const TranscriptionProcessor = ({ fullTranscription }) => {
 
   return (
     <div>
-      <button className="info-button reformat-button" id="reformat-button" onClick={handleProcessClick}>Make Report</button>
-      {report ? `<div>${report}</div>` : null}
-      {json ? `<div>${json}</div>` : null}
+      <button
+        className="info-button reformat-button"
+        id="reformat-button"
+        onClick={handleProcessClick}
+      >
+        Make Report
+      </button>
+      {report ? <ShowReport report={report} /> : null}
+      {json ? <ShowJson json={json} /> : null}
     </div>
   );
 };

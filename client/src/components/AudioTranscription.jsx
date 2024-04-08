@@ -1,9 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  getBetterToken,
-  makeComposition,
-  transformRadiologyReport,
-} from "../utils/utils";
 import TranscriptionProcessor from "./TranscriptionProcessor";
 import '../styles/audiotranscription.css'
 

@@ -147,14 +147,14 @@ async function fetchWithTokenRefresh(url, options = {}) {
 }
 
 // Example usage
-async function makeAPICall() {
-  try {
-    const response = await fetchWithTokenRefresh("/api/protected");
-    if (!response.ok) throw new Error("Failed to fetch data");
-    const data = await response.json();
-    console.log(data);
-  } catch (error) {
-    console.error("Error making API call:", error);
-    // Handle error
-  }
-}
+// async function makeAPICall() {
+//   try {
+//     const response = await fetchWithTokenRefresh("/api/protected");
+//     if (!response.ok) throw new Error("Failed to fetch data");
+//     const data = await response.json();
+//     console.log(data);
+//   } catch (error) {
+//     console.error("Error making API call:", error);
+//     // Handle error
+//   }
+// }

@@ -1,17 +1,32 @@
-import React from 'react';
+import React from "react";
 import {
-    getBetterToken,
-    makeComposition,
-    showComposition,
-    transformRadiologyReport,
-  } from "../utils/utils";
+  getBetterToken,
+  makeComposition,
+  showComposition,
+} from "../utils/utils.js";
 
+const InsertData = ({ jsonString }) => {
+  const handleProcessReport = async () => {
+    try {
+      const token = await getBetterToken();
+      if (!token) {
+        console.error("Failed to obtain token");
+        return;
+      }
 
-const DataInserter = ({ fullTranscription }) => {
+      // Assuming jsonString is the JSON string of the radiology report to be processed
+      const composition = await makeComposition(token, jsonString);
+      console.log("Composition created:", composition);
 
+      // Optionally, fetch the most recent composition
+      const recentComposition = await showComposition(token);
+      console.log('Most recent composition:', recentComposition);
+    } catch (error) {
+      console.error("Error processing report:", error);
+    }
+  };
 
+  return <button onClick={handleProcessReport}>Process Report</button>;
+};
 
-
-}
-
-export default DataInserter;
+export default InsertData;
