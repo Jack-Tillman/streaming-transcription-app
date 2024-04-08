@@ -82,6 +82,26 @@ export function transformRadiologyReport(inputReport) {
   return targetReport;
 }
 
+export async function showComposition(token){
+  try {
+    console.log("time to fetch the composition");
+    const response = await fetch("/api/getComposition", {
+      method: "POST",
+      headers: { "Accept": "application/json", "Content-Type": "application/json", "Authorization": `${token}`},
+    });
+
+    const data = await response.json();
+    console.log(response);
+    console.log("done fetching the most recent composition : )!");
+    console.log(data);
+    // return data.choices[0].message.content;
+    return;
+  } catch (error) {
+    console.error("Error while fetching most recent composition:", error)
+    throw error;
+  }
+}
+
 /* TO IMPLEMENT LATER ON */
 
 /* potential setup for implementation of automatic refresh token retrieval. None have been tested yet */

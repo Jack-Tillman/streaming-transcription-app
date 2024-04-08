@@ -4,7 +4,7 @@ import {
   makeComposition,
   transformRadiologyReport,
 } from "../utils/utils";
-
+import TranscriptionProcessor from "./TranscriptionProcessor";
 import '../styles/audiotranscription.css'
 
 const AudioTranscription = () => {
@@ -92,6 +92,7 @@ const AudioTranscription = () => {
         </div>
         <div id="captions">Captions: {captions}</div>
         <div id="full-transcription">Full Transcription: {fullTranscription}</div>
+        <TranscriptionProcessor fullTranscription={fullTranscription} />
       </div>
     );
   };

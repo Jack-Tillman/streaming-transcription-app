@@ -1,0 +1,46 @@
+
+/* called after each spoken chunk to make full transcription */
+async function processTranscription(transcription) {
+  // Update fullTranscription to include each chunk
+  fullTranscription.innerHTML += `<span>${transcription}</span><br>`;
+}
+
+/* send request to GPT-4 to format data into a radiology report */
+async function chatWithGPT(content) {
+  try {
+    console.log("time to make the report");
+    const response = await fetch("/api/createReport", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: content }),
+    });
+    //likely error thrower
+    if (!response.ok) throw new Error("Network response was not ok.");
+
+    const data = await response.json();
+    console.log("done making reports : )!");
+    return data.choices[0].message.content;
+  } catch (error) {
+    console.error("Error while making your report:", error);
+    throw error;
+  }
+}
+
+/* send request to GPT-4 to format radiology report into JSON */
+async function jsonGPT(content) {
+  try {
+    console.log("time to make the json");
+    const response = await fetch("/api/createJson", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: content }),
+    });
+
+    const data = await response.json();
+    console.log("done making json : )!");
+    return data.choices[0].message.content;
+  } catch (error) {
+    console.error("Error while formatting your JSON data:", error)
+    throw error;
+  }
+}
