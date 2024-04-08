@@ -5,7 +5,12 @@ export const Home = () => {
   return (
     <>
       <AudioTranscription />
-      {/* <div className="response-container" id="response-container">
+    </>
+  );
+};
+
+/* 
+       <div className="response-container" id="response-container">
         <span className="response-div" id="gpt-response"></span>
         <span className="response-div" id="json-response"></span>
         <span className="response-div" id="better-response"></span>
@@ -33,7 +38,5 @@ export const Home = () => {
         >
           Insert ehr
         </button>
-      </div> */}
-    </>
-  );
-};
+      </div> 
+*/

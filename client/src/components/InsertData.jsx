@@ -20,13 +20,21 @@ const InsertData = ({ jsonString }) => {
 
       // Optionally, fetch the most recent composition
       const recentComposition = await showComposition(token);
-      console.log('Most recent composition:', recentComposition);
+      console.log("Most recent composition:", recentComposition);
     } catch (error) {
       console.error("Error processing report:", error);
     }
   };
 
-  return <button onClick={handleProcessReport}>Process Report</button>;
+  return (
+    <button
+      className="info-button insert-button"
+      id="insert-button"
+      onClick={handleProcessReport}
+    >
+      Insert Data
+    </button>
+  );
 };
 
 export default InsertData;

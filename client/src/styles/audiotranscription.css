@@ -1,3 +1,13 @@
+.content {
+    display: flex;
+    height: 20vh;
+    position: relative;
+    align-items: center;
+    flex-direction: column;
+    margin-top:2rem;
+  }
+
+
 .mic-checkbox {
     display: none;
 }
@@ -36,7 +46,7 @@
     font-weight: 700;
     font-size: 25px;
     text-align: center;
-    line-height: 20px;
+    /* line-height: 20px; */
     z-index: 2;
     transform: rotateY(0deg);
     pointer-events: none;
@@ -115,3 +125,15 @@
         transform: rotate(359deg);
     }
 }
+
+.full-transcription {
+    display:flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-width:50vw;
+    max-height:70vh;
+    justify-content: flex-end;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  

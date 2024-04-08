@@ -1,0 +1,9 @@
+#response-container {
+    display:flex;
+    gap:16px;
+}
+
+.full-report{
+    display:flex;
+
+}

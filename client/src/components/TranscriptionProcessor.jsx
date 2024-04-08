@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import InsertData from "./InsertData";
+import "../styles/transcriptionprocessor.css";
 
 const ShowReport = ({ report }) => {
   // let content = report;
   console.log("report  is:", report);
   return (
     <>
-      <div className="full-report">{report}</div>
+      <span className="full-report" id="gpt-response">{report}</span>
     </>
   );
 };
@@ -15,7 +16,7 @@ const ShowJson = ({ json }) => {
   console.log("json is:", json);
   return (
     <>
-      <div className="full-json">{json}</div>
+      <span className="full-json" id="json-response">{json}</span>
       <InsertData jsonString={json} />
     </>
   );
@@ -73,7 +74,7 @@ const TranscriptionProcessor = ({ fullTranscription }) => {
   };
 
   return (
-    <div>
+    <span className="returned-data" id="returned-data">
       <button
         className="info-button reformat-button"
         id="reformat-button"
@@ -81,9 +82,11 @@ const TranscriptionProcessor = ({ fullTranscription }) => {
       >
         Make Report
       </button>
-      {report ? <ShowReport report={report} /> : null}
-      {json ? <ShowJson json={json} /> : null}
-    </div>
+      <span id="response-containers" className="response-container">
+        {report ? <ShowReport report={report} /> : null}
+        {json ? <ShowJson json={json} /> : null}
+      </span>
+    </span>
   );
 };
 
