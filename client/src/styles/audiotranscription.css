@@ -1,11 +1,11 @@
 .content {
     display: flex;
-    height: 20vh;
+    min-height: 20vh;
     position: relative;
     align-items: center;
     flex-direction: column;
-    margin-top:2rem;
-  }
+    margin: 2rem auto;
+}
 
 
 .mic-checkbox {
@@ -17,7 +17,13 @@
 }
 
 .button-container {
-    perspective: 500px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 5rem;
+    gap: 16px;
+    margin: 1rem auto;
+    /* perspective: 500px; */
 }
 
 .mic-button {
@@ -126,14 +132,3 @@
     }
 }
 
-.full-transcription {
-    display:flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    max-width:50vw;
-    max-height:70vh;
-    justify-content: flex-end;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-  }
-  

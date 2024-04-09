@@ -1,30 +1,8 @@
 import React, { useState } from "react";
-import InsertData from "./InsertData";
 import "../styles/transcriptionprocessor.css";
 
-const ShowReport = ({ report }) => {
-  // let content = report;
-  console.log("report  is:", report);
-  return (
-    <>
-      <span className="full-report" id="gpt-response">{report}</span>
-    </>
-  );
-};
+const TranscriptionProcessor = ({ report, json, setReport, setJson, fullTranscription }) => {
 
-const ShowJson = ({ json }) => {
-  console.log("json is:", json);
-  return (
-    <>
-      <span className="full-json" id="json-response">{json}</span>
-      <InsertData jsonString={json} />
-    </>
-  );
-};
-
-const TranscriptionProcessor = ({ fullTranscription }) => {
-  const [report, setReport] = useState("");
-  const [json, setJson] = useState("");
 
   const chatWithGPT = async (content) => {
     try {
@@ -46,7 +24,7 @@ const TranscriptionProcessor = ({ fullTranscription }) => {
     }
   };
 
-  // Function to format radiology report into JSON (adapted from provided code)
+  // convert report to json
   const jsonGPT = async (content) => {
     try {
       const response = await fetch("/api/createJson", {
@@ -61,20 +39,19 @@ const TranscriptionProcessor = ({ fullTranscription }) => {
       } else {
         console.error("Error while setting json.");
       }
-      // Assuming you want to do something with the response data here
     } catch (error) {
       console.error("Error while formatting your JSON data:", error);
     }
   };
 
   // Function to handle the button click and initiate the API calls
-  const handleProcessClick = () => {
+  const handleProcessClick = async () => {
     chatWithGPT(fullTranscription);
     jsonGPT(fullTranscription);
   };
 
   return (
-    <span className="returned-data" id="returned-data">
+    <div className="returned-data" id="returned-data">
       <button
         className="info-button reformat-button"
         id="reformat-button"
@@ -82,11 +59,8 @@ const TranscriptionProcessor = ({ fullTranscription }) => {
       >
         Make Report
       </button>
-      <span id="response-containers" className="response-container">
-        {report ? <ShowReport report={report} /> : null}
-        {json ? <ShowJson json={json} /> : null}
-      </span>
-    </span>
+
+    </div>
   );
 };
 

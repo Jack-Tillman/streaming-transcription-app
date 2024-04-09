@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   getBetterToken,
   makeComposition,
   showComposition,
 } from "../utils/utils.js";
 
-const InsertData = ({ jsonString }) => {
+
+const InsertData = ({ json }) => {
+
+
   const handleProcessReport = async () => {
     try {
       const token = await getBetterToken();
@@ -15,7 +18,7 @@ const InsertData = ({ jsonString }) => {
       }
 
       // Assuming jsonString is the JSON string of the radiology report to be processed
-      const composition = await makeComposition(token, jsonString);
+      const composition = await makeComposition(token, json);
       console.log("Composition created:", composition);
 
       // Optionally, fetch the most recent composition

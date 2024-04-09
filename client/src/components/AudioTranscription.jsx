@@ -1,13 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import TranscriptionProcessor from "./TranscriptionProcessor";
 import "../styles/audiotranscription.css";
 
-const AudioTranscription = () => {
-  const [isRecording, setIsRecording] = useState(false);
-  const [captions, setCaptions] = useState("");
-  const [fullTranscription, setFullTranscription] = useState("");
-  const [showCaptions, setShowCaptions] = useState(true);
-  const [showTranscript, setShowTranscript] = useState(true);
+const AudioTranscription = ({
+  captions,
+  setCaptions,
+  isRecording,
+  setIsRecording,
+  fullTranscription,
+  setFullTranscription,
+}) => {
+  // const [showCaptions, setShowCaptions] = useState(true);
+  // const [showTranscript, setShowTranscript] = useState(true);
+
   const socket = useRef(null);
   const microphone = useRef(null);
 
@@ -77,14 +81,6 @@ const AudioTranscription = () => {
 
   return (
     <div className="content">
-      <div className="captions" id="captions">
-        <span id="realtime-caption">{captions ? captions : "Your speech shows up here"}</span>
-      </div>
-      <div className="full-transcription">
-        <h2 id="left-h2">Full transcription Below</h2>
-        <span className="full-transcription" id="full-transcription">{fullTranscription}</span>
-      </div>
-  
       <div className="button-container">
         <input
           type="checkbox"
@@ -103,8 +99,6 @@ const AudioTranscription = () => {
           </div>
         </label>
       </div>
-
-      <TranscriptionProcessor fullTranscription={fullTranscription} />
     </div>
   );
 };

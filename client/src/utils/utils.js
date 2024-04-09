@@ -95,7 +95,7 @@ export async function showComposition(token){
     console.log("done fetching the most recent composition : )!");
     console.log(data);
     // return data.choices[0].message.content;
-    return;
+    return data;
   } catch (error) {
     console.error("Error while fetching most recent composition:", error)
     throw error;
