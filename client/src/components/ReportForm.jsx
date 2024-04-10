@@ -1,24 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { chatWithGPT } from "../api/api";
-const Form = ({ fullTranscription, setReport }) => {
+import { jsonGPT } from "../api/api";
+import "../styles/forms.css"
+import InsertData from "./InsertData";
+
+
+const ReportForm = ({ report, setJson, json }) => {
   const [formData, setFormData] = useState({
-    transcription: "", // Initialize with empty string
+    report: "", // Initialize with empty string
   });
 
-  // Initially, consider the form not ready to submit until we verify the transcription is loaded.
+  // Initially, consider the form not ready to submit until we verify the report is loaded.
   const [isFormReady, setIsFormReady] = useState(false);
 
-  // Populate the text area with fullTranscription on component mount
+  // Populate the text area with report on component mount
   useEffect(() => {
-    if (fullTranscription) {
-      setFormData({ transcription: fullTranscription });
-      setIsFormReady(true); // Only allow submissions once fullTranscription is loaded
+    if (report) {
+      setFormData({ report: report });
+      setIsFormReady(true); // Only allow submissions once report is loaded
     }
-  }, [fullTranscription]);
+  }, [report]);
 
   // Handle changes in the text area
   const handleChange = (e) => {
-    setFormData({ transcription: e.target.value });
+    setFormData({ report: e.target.value });
     if (e.target.value.trim() !== "") {
       setIsFormReady(true);
     } else {
@@ -30,17 +34,17 @@ const Form = ({ fullTranscription, setReport }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isFormReady) {
-      alert("Please fill in the transcription.");
+      alert("Please fill in the report.");
       return;
     }
 
     try {
       console.log("form 38 formdata", formData);
 
-      const response = await chatWithGPT(formData);
+      const response = await jsonGPT(formData);
       //   const data = await response.json();
       if (response) {
-        setReport(response);
+        setJson(response);
       }
     } catch (error) {
       console.error("Error during submission:", error);
@@ -49,6 +53,7 @@ const Form = ({ fullTranscription, setReport }) => {
 
   return (
     <form
+    className="form report-form"
       onSubmit={handleSubmit}
       style={{
         display: "flex",
@@ -57,14 +62,14 @@ const Form = ({ fullTranscription, setReport }) => {
         maxWidth: "500px",
       }}
     >
-      <label htmlFor="transcription">Transcription</label>
+      <label htmlFor="report">Report</label>
       <textarea
-        id="transcription"
-        name="transcription"
-        value={formData.transcription}
+        id="report-textarea"
+        className="form-textarea"
+        name="report"
+        value={formData.report}
         onChange={handleChange}
         required
-        style={{ width: "100%", height: "300px", padding: "8px" }}
       />
       <button
         type="submit"
@@ -76,8 +81,9 @@ const Form = ({ fullTranscription, setReport }) => {
       >
         Submit
       </button>
+      {json && <InsertData json={json} />}
     </form>
   );
 };
 
-export default Form;
+export default ReportForm;

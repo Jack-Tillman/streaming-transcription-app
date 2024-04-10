@@ -120,7 +120,6 @@ app.post("/api/createReport", async (req, res) => {
     const stringContent = JSON.stringify(content);
     console.log(stringContent)
     console.log(typeof stringContent);
-    console.log("hi")
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -166,6 +165,9 @@ app.post("/api/createJson", async (req, res) => {
   try {
     const { content } = req.body;
     console.log("server json content is:", content);
+    const stringContent = JSON.stringify(content);
+    console.log(stringContent)
+    console.log(typeof stringContent);
   
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -183,7 +185,7 @@ app.post("/api/createJson", async (req, res) => {
           },
           {
             role: "user",
-            content: `Please convert the following radiology report into JSON format with only 7 keys: exam, history, technique, comparison, findings, impression, and clinical_summary. ${content}`,
+            content: `Please convert the following radiology report into JSON format with only 7 keys: exam, history, technique, comparison, findings, impression, and clinical_summary. ${stringContent}`,
           },
         ],
         temperature: 0.7,

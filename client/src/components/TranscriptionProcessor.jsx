@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "../styles/transcriptionprocessor.css";
 
 const TranscriptionProcessor = ({ report, json, setReport, setJson, fullTranscription }) => {

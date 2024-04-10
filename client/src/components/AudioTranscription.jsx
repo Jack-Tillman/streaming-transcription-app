@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import "../styles/audiotranscription.css";
 
 const AudioTranscription = ({
@@ -8,9 +8,11 @@ const AudioTranscription = ({
   setIsRecording,
   fullTranscription,
   setFullTranscription,
+  showCaptions,
+  setShowCaptions,
+  showRecord,
+  setShowRecord,
 }) => {
-
-
   const socket = useRef(null);
   const microphone = useRef(null);
 
@@ -51,6 +53,8 @@ const AudioTranscription = ({
     if (isRecording) {
       microphone.current.stop();
       setIsRecording(false);
+      setShowCaptions(false);
+      setShowRecord(false);
       console.log("Stopped recording.");
     } else {
       try {
@@ -80,13 +84,15 @@ const AudioTranscription = ({
 
   return (
     <div className="content">
-        <input
-          type="checkbox"
-          id="record"
-          className="mic-checkbox"
-          checked={isRecording}
-          onChange={toggleRecording} // This line ensures the checkbox reflects the current recording state and can toggle it
-        />
+      <input
+        type="checkbox"
+        id="record"
+        className="mic-checkbox"
+        checked={isRecording}
+        onChange={toggleRecording} // This line ensures the checkbox reflects the current recording state and can toggle it
+      />
+      {/* only show the record button when user is not editing forms */}
+      {showRecord && (
         <label htmlFor="record" className="mic-button">
           <div className="mic">
             <div className="mic-button-loader"></div>
@@ -96,7 +102,16 @@ const AudioTranscription = ({
             <span>{isRecording ? "STOP" : "START"}</span>
           </div>
         </label>
-   
+      )}
+      {/* <label htmlFor="record" className="mic-button">
+          <div className="mic">
+            <div className="mic-button-loader"></div>
+            <div className="mic-base"></div>
+          </div>
+          <div className="button-message">
+            <span>{isRecording ? "STOP" : "START"}</span>
+          </div>
+        </label> */}
     </div>
   );
 };
