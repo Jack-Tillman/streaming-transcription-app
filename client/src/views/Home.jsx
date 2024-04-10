@@ -5,6 +5,7 @@ import InsertData from "../components/InsertData";
 import { useState } from "react";
 import { ShowJson } from "../components/ShowJson";
 import { ShowReport } from "../components/ShowReport";
+import Form from "../components/Form";
 
 export const Home = () => {
   const [captions, setCaptions] = useState("");
@@ -24,13 +25,13 @@ export const Home = () => {
             </div>
             <div className="full-transcription">
               <h2 id="left-h2">Full transcription Below</h2>
-              <span className="full-transcription" id="full-transcription">
-                {fullTranscription}
-              </span>
+              <span id="full-transcription">{fullTranscription}</span>
             </div>
           </>
         ) : null}
-
+        {fullTranscription && !isRecording ? (
+          <Form fullTranscription={fullTranscription} setReport={setReport} />
+        ) : null}
         <span id="response-containers" className="response-container">
           {report ? <ShowReport report={report} /> : null}
           {json ? <ShowJson json={json} /> : null}
@@ -44,7 +45,7 @@ export const Home = () => {
           setIsRecording={setIsRecording}
         />
 
-        {fullTranscription ? (
+        {/* {fullTranscription && !isRecording ? (
           <TranscriptionProcessor
             fullTranscription={fullTranscription}
             report={report}
@@ -52,7 +53,7 @@ export const Home = () => {
             setJson={setJson}
             setReport={setReport}
           />
-        ) : null}
+        ) : null} */}
         {json && <InsertData json={json} />}
       </div>
     </>

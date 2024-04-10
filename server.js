@@ -116,7 +116,11 @@ app.get("/", (req, res) => {
 app.post("/api/createReport", async (req, res) => {
   try {
     const { content } = req.body;
-    // console.log("server report content is:", content);
+    console.log("server report content is:", content);
+    const stringContent = JSON.stringify(content);
+    console.log(stringContent)
+    console.log(typeof stringContent);
+    console.log("hi")
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -133,7 +137,7 @@ app.post("/api/createReport", async (req, res) => {
           },
           {
             role: "user",
-            content: `Please produce a radiology report from the following information:  ${content}`,
+            content: `Please produce a radiology report from the following information:  ${stringContent}`,
           },
         ],
         temperature: 0.7,
@@ -161,7 +165,8 @@ app.post("/api/createReport", async (req, res) => {
 app.post("/api/createJson", async (req, res) => {
   try {
     const { content } = req.body;
-    // console.log("server json content is:", content);
+    console.log("server json content is:", content);
+  
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {

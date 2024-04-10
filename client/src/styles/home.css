@@ -13,7 +13,6 @@ html {
 body {
   color: white;
   display: flex;
-  align-items: center;
   font-family: "Inter", sans-serif;
   justify-content: center;
   flex-direction: column;
@@ -23,16 +22,17 @@ body {
 
 
 #captions {
-  color: rgb(237, 237, 242);
-  font-size: 24px;
   font-family: "Inter", sans-serif;
-  margin: 10px 0;
+  min-height:15rem;
+  max-width:70rem;
+  padding-top:2rem;
   text-align: center;
+  border:1px solid white;
 }
 
 #realtime-caption {
   color:rgb(40, 155, 255);
-  font-size:32px;
+  font-size:3rem;
 }
 
 h1 {
@@ -47,7 +47,6 @@ h1 {
 #home-container {
   display:flex;
   flex-direction: column;
-  max-height:85vh;
   margin:0 auto;
   justify-content: flex-start;
   align-items: center;
@@ -139,10 +138,14 @@ padding-bottom: 1rem;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  max-width: 65vw;
+  max-width: 50vw;
   max-height: 40vh;
-  justify-content: flex-end;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  font-size: 1rem;
+  justify-content: center;
+  padding: 1rem;
+  font-size: 1.25rem;
+  border:2.5px solid white;
+}
+
+#full-transcription {
+  max-width:60vw;
 }

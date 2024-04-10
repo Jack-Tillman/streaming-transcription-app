@@ -9,8 +9,7 @@ const AudioTranscription = ({
   fullTranscription,
   setFullTranscription,
 }) => {
-  // const [showCaptions, setShowCaptions] = useState(true);
-  // const [showTranscript, setShowTranscript] = useState(true);
+
 
   const socket = useRef(null);
   const microphone = useRef(null);
@@ -39,14 +38,14 @@ const AudioTranscription = ({
       console.log("Closing WebSocket connection...");
       socket.current.close();
     };
-  }, []);
+  }, [setCaptions]);
 
   useEffect(() => {
     if (isRecording) {
       console.log("Appending to full transcription:", captions);
       setFullTranscription((prev) => `${prev}${captions} `);
     }
-  }, [captions, isRecording]);
+  }, [captions, isRecording, setFullTranscription]);
 
   const toggleRecording = async () => {
     if (isRecording) {
@@ -81,7 +80,6 @@ const AudioTranscription = ({
 
   return (
     <div className="content">
-      <div className="button-container">
         <input
           type="checkbox"
           id="record"
@@ -98,7 +96,7 @@ const AudioTranscription = ({
             <span>{isRecording ? "STOP" : "START"}</span>
           </div>
         </label>
-      </div>
+   
     </div>
   );
 };

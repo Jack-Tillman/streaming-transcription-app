@@ -1,10 +1,10 @@
 .content {
     display: flex;
-    min-height: 20vh;
-    position: relative;
+    min-height: 10vh;
     align-items: center;
     flex-direction: column;
-    margin: 2rem auto;
+    margin: 2rem auto 0rem auto;
+    border:1px solid white;
 }
 
 
@@ -52,7 +52,6 @@
     font-weight: 700;
     font-size: 25px;
     text-align: center;
-    /* line-height: 20px; */
     z-index: 2;
     transform: rotateY(0deg);
     pointer-events: none;
