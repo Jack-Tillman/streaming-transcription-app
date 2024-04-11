@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { jsonGPT } from "../api/api";
-import "../styles/forms.css"
+import "../styles/forms.css";
 import InsertData from "./InsertData";
 
-
-const ReportForm = ({ report, setJson, json }) => {
+const ReportForm = ({ report, setJson, json, databaseEntry, setDatabaseEntry }) => {
   const [formData, setFormData] = useState({
     report: "", // Initialize with empty string
   });
@@ -53,16 +52,12 @@ const ReportForm = ({ report, setJson, json }) => {
 
   return (
     <form
-    className="form report-form"
+      className="form report-form"
       onSubmit={handleSubmit}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "20px",
-        maxWidth: "500px",
-      }}
     >
-      <label htmlFor="report">Report</label>
+      <label htmlFor="report" id="radiology-label">
+        Radiology Report
+      </label>
       <textarea
         id="report-textarea"
         className="form-textarea"
@@ -71,17 +66,21 @@ const ReportForm = ({ report, setJson, json }) => {
         onChange={handleChange}
         required
       />
-      <button
-        type="submit"
-        disabled={!isFormReady}
-        style={{
-          padding: "10px",
-          cursor: isFormReady ? "pointer" : "not-allowed",
-        }}
-      >
-        Submit
-      </button>
-      {json && <InsertData json={json} />}
+      {!json ? (
+        <button
+          type="submit"
+          className="submit-btn btn"
+          disabled={!isFormReady}
+          style={{
+            padding: "10px",
+            cursor: isFormReady ? "pointer" : "not-allowed",
+          }}
+        >
+          Submit
+        </button>
+      ) : (
+        <InsertData json={json} databaseEntry={databaseEntry} setDatabaseEntry={setDatabaseEntry} />
+      )}
     </form>
   );
 };

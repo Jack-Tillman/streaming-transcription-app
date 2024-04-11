@@ -296,6 +296,8 @@ app.post("/api/getComposition", async (req, res) => {
 
     const response = await fetch("https://sandbox.better.care/ehr/rest/v1/view/getMostRecentRadiologyComposition?limit=1", requestOptions);
     const data = await response.json();
+    console.log('server data is')
+    console.log(data);
     res.json(data);
     return data;
   } catch (error) {

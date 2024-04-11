@@ -6,7 +6,7 @@ import {
 } from "../utils/utils.js";
 
 
-const InsertData = ({ json }) => {
+const InsertData = ({ json, databaseEntry, setDatabaseEntry  }) => {
 
   const handleProcessReport = async () => {
     try {
@@ -22,6 +22,11 @@ const InsertData = ({ json }) => {
 
       // Optionally, fetch the most recent composition
       const recentComposition = await showComposition(token);
+      if (recentComposition){
+        console.log(recentComposition);
+        console.log(typeof recentComposition);
+        setDatabaseEntry(recentComposition);
+      }
       console.log("Most recent composition:", recentComposition);
     } catch (error) {
       console.error("Error processing report:", error);
@@ -30,8 +35,7 @@ const InsertData = ({ json }) => {
 
   return (
     <button
-      className="info-button insert-button"
-      id="insert-button"
+      className="submit-btn btn"
       onClick={handleProcessReport}
     >
       Insert Data

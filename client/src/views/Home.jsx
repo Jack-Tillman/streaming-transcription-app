@@ -7,6 +7,7 @@ import { ShowJson } from "../components/ShowJson";
 import { ShowReport } from "../components/ShowReport";
 import TranscriptionForm from "../components/TranscriptionForm";
 import ReportForm from "../components/ReportForm";
+import RecentInsertionPage from "../components/RecentInsertionPage";
 
 export const Home = () => {
   const [captions, setCaptions] = useState("");
@@ -16,9 +17,11 @@ export const Home = () => {
   const [report, setReport] = useState("");
   const [json, setJson] = useState("");
   const [showCaptions, setShowCaptions] = useState(true);
+  const [databaseEntry, setDatabaseEntry] = useState(null);
   return (
     <>
       <div id="home-container">
+        {databaseEntry && <RecentInsertionPage databaseEntry={databaseEntry}/>}
         {/* until a report is made, show captions and transcription */}
         {!report && showCaptions ? (
           <>
@@ -46,7 +49,7 @@ export const Home = () => {
 
         {/* after user makes report, render second form so they can edit the report */}
         {report && !isRecording ? (
-          <ReportForm report={report} setJson={setJson} json={json} />
+          <ReportForm report={report} setJson={setJson} json={json} databaseEntry={databaseEntry} setDatabaseEntry={setDatabaseEntry} />
         ) : null}
 
         <span id="response-containers" className="response-container">

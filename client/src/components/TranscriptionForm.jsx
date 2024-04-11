@@ -55,7 +55,7 @@ const TranscriptionForm = ({ fullTranscription, setReport, showRecord, setShowRe
 
   return (
     <form className="form transcription-form" onSubmit={handleSubmit}>
-      <label htmlFor="transcription">Transcription</label>
+      <label htmlFor="transcription" id="transcription-label">Edit Your Transcription Below</label>
       <textarea
         id="transcription-textarea"
         className="form-textarea"
@@ -66,13 +66,14 @@ const TranscriptionForm = ({ fullTranscription, setReport, showRecord, setShowRe
       />
       <button
         type="submit"
+        className="submit-btn btn"
         disabled={!isFormReady}
         style={{
           padding: "10px",
           cursor: isFormReady ? "pointer" : "not-allowed",
         }}
       >
-        Submit
+        Make Report
       </button>
       {/* <button type="submit" disabled={showRecord} onClick={restartApp}>
         Restart
