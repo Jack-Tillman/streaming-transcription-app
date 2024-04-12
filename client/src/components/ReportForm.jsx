@@ -1,72 +1,92 @@
 import React, { useState, useEffect } from "react";
 import { jsonGPT } from "../api/api";
+import {
+  getBetterToken,
+  makeComposition,
+  showComposition,
+} from "../utils/utils.js";
 import "../styles/forms.css";
-import InsertData from "./InsertData";
+import { useLoading } from "../contexts/LoadingContext";
+import Loading from "./Loading";
 
-const ReportForm = ({ report, setJson, json, databaseEntry, setDatabaseEntry }) => {
+const ReportForm = ({
+  report,
+  setJson,
+  json,
+  databaseEntry,
+  setDatabaseEntry,
+}) => {
   const [formData, setFormData] = useState({
-    report: "", // Initialize with empty string
+    report: "",
   });
-
-  // Initially, consider the form not ready to submit until we verify the report is loaded.
   const [isFormReady, setIsFormReady] = useState(false);
+  const { setLoading, isLoading } = useLoading();
 
-  // Populate the text area with report on component mount
   useEffect(() => {
-    if (report) {
+    if (!report) {
+      setLoading(true);
+    } else {
       setFormData({ report: report });
-      setIsFormReady(true); // Only allow submissions once report is loaded
+      setIsFormReady(true);
+      setLoading(false);
     }
-  }, [report]);
+  }, [report, setLoading]);
 
-  // Handle changes in the text area
   const handleChange = (e) => {
     setFormData({ report: e.target.value });
-    if (e.target.value.trim() !== "") {
-      setIsFormReady(true);
-    } else {
-      setIsFormReady(false);
+    setIsFormReady(e.target.value.trim() !== "");
+  };
+
+  const handleProcessReport = async (jsonResponse) => {
+    try {
+      const token = await getBetterToken();
+      if (!token) {
+        console.error("Failed to obtain token");
+        return;
+      }
+      const composition = await makeComposition(token, jsonResponse);
+      const recentComposition = await showComposition(token);
+      setDatabaseEntry(recentComposition);
+    } catch (error) {
+      console.error("Error processing report:", error);
     }
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isFormReady) {
       alert("Please fill in the report.");
       return;
     }
-
+    setLoading(true); // This triggers the Loading component to display
     try {
-      console.log("form 38 formdata", formData);
-
       const response = await jsonGPT(formData);
-      //   const data = await response.json();
+      setJson(response);
       if (response) {
-        setJson(response);
+        await handleProcessReport(response);
       }
     } catch (error) {
       console.error("Error during submission:", error);
+    } finally {
+      setLoading(false); // Ensure to turn off the loading indicator when done
     }
   };
 
   return (
-    <form
-      className="form report-form"
-      onSubmit={handleSubmit}
-    >
-      <label htmlFor="report" id="radiology-label">
-        Radiology Report
-      </label>
-      <textarea
-        id="report-textarea"
-        className="form-textarea"
-        name="report"
-        value={formData.report}
-        onChange={handleChange}
-        required
-      />
-      {!json ? (
+    <>
+      {isLoading && <Loading />}
+      <form className="form report-form" onSubmit={handleSubmit}>
+        <label htmlFor="report" id="radiology-label">
+          Radiology Report
+        </label>
+        <textarea
+          id="report-textarea"
+          className="form-textarea"
+          name="report"
+          value={formData.report}
+          onChange={handleChange}
+          required
+        />
         <button
           type="submit"
           className="submit-btn btn"
@@ -76,12 +96,10 @@ const ReportForm = ({ report, setJson, json, databaseEntry, setDatabaseEntry }) 
             cursor: isFormReady ? "pointer" : "not-allowed",
           }}
         >
-          Submit
+          Insert Report
         </button>
-      ) : (
-        <InsertData json={json} databaseEntry={databaseEntry} setDatabaseEntry={setDatabaseEntry} />
-      )}
-    </form>
+      </form>
+    </>
   );
 };
 

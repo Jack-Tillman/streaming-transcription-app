@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import "../styles/audiotranscription.css";
 
+
+
 const AudioTranscription = ({
   captions,
   setCaptions,
@@ -19,7 +21,7 @@ const AudioTranscription = ({
   useEffect(() => {
     console.log("Setting up WebSocket connection...");
     socket.current = new WebSocket("ws://localhost:3001");
-
+    
     socket.current.onopen = () => console.log("WebSocket connected");
     socket.current.onclose = () => console.log("WebSocket disconnected");
     socket.current.onerror = (error) => console.log("WebSocket error:", error);
@@ -33,6 +35,7 @@ const AudioTranscription = ({
           data.channel.alternatives[0].transcript
         );
         setCaptions(data.channel.alternatives[0].transcript);
+        setFullTranscription((prev) => `${prev}${data.channel.alternatives[0].transcript} `);
       }
     };
 
@@ -40,14 +43,7 @@ const AudioTranscription = ({
       console.log("Closing WebSocket connection...");
       socket.current.close();
     };
-  }, [setCaptions]);
-
-  useEffect(() => {
-    if (isRecording) {
-      console.log("Appending to full transcription:", captions);
-      setFullTranscription((prev) => `${prev}${captions} `);
-    }
-  }, [captions, isRecording, setFullTranscription]);
+  }, [ setCaptions, setFullTranscription]);
 
   const toggleRecording = async () => {
     if (isRecording) {
@@ -89,7 +85,7 @@ const AudioTranscription = ({
         id="record"
         className="mic-checkbox"
         checked={isRecording}
-        onChange={toggleRecording} // This line ensures the checkbox reflects the current recording state and can toggle it
+        onChange={toggleRecording} 
       />
       {/* only show the record button when user is not editing forms */}
       {showRecord && (

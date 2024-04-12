@@ -1,11 +1,13 @@
 import React from "react";
 import "../styles/transcriptionprocessor.css";
+import { useLoading } from "../contexts/LoadingContext";
 
 const TranscriptionProcessor = ({ report, json, setReport, setJson, fullTranscription }) => {
-
+  const { setLoading } = useLoading();
 
   const chatWithGPT = async (content) => {
     try {
+      setLoading(true);
       const response = await fetch("/api/createReport", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -21,6 +23,8 @@ const TranscriptionProcessor = ({ report, json, setReport, setJson, fullTranscri
       console.log("Report creation successful:", data);
     } catch (error) {
       console.error("Error while making your report:", error);
+    } finally {
+      setLoading(false);
     }
   };
 

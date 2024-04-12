@@ -1,5 +1,6 @@
 import React from "react";
 import "../styles/recentinsertionpage.css"
+import AudioTranscription from "../components/AudioTranscription";
 
 const RecentInsertionPage = ({ databaseEntry }) => {
   const entry = databaseEntry ? Object.values(databaseEntry)[0][0] : null;

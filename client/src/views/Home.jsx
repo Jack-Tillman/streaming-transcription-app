@@ -7,6 +7,9 @@ import { ShowJson } from "../components/ShowJson";
 import { ShowReport } from "../components/ShowReport";
 import TranscriptionForm from "../components/TranscriptionForm";
 import ReportForm from "../components/ReportForm";
+import Loading from "../components/Loading";
+import { useLoading } from "../contexts/LoadingContext";
+
 // import RecentInsertionPage from "./RecentInsertionPage";
 
 export const Home = ({databaseEntry, setDatabaseEntry}) => {
@@ -17,6 +20,7 @@ export const Home = ({databaseEntry, setDatabaseEntry}) => {
   const [report, setReport] = useState("");
   const [json, setJson] = useState("");
   const [showCaptions, setShowCaptions] = useState(true);
+  const { setLoading } = useLoading();
 
   return (
     <>
@@ -35,7 +39,6 @@ export const Home = ({databaseEntry, setDatabaseEntry}) => {
             </div>
           </>
         ) : null}
-
         {/* user has recorded transcription and reformatted it, show form of their transcription */}
         {fullTranscription && !isRecording && !report ? (
           <TranscriptionForm
@@ -52,9 +55,6 @@ export const Home = ({databaseEntry, setDatabaseEntry}) => {
         ) : null}
 
         <span id="response-containers" className="response-container">
-          {/* {report ? <ShowReport report={report} /> : null} */}
-
-          {/* {json ? <ShowJson json={json} /> : null} */}
         </span>
 
         <AudioTranscription
