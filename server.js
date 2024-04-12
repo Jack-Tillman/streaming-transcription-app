@@ -143,12 +143,19 @@ app.post("/api/createReport", async (req, res) => {
       }),
     });
     const data = await response.json();
+    if(data){
+      console.log('server data is', data);
+    }else {
+      console.log('no server data')
+      console.log(response);
+      
+    }
     // console.log("server data is:", data);
     console.log("Your radiology report:");
     console.log("");
     console.log("");
     console.log("___");
-    console.log(data.choices[0].message.content);
+    // console.log(data.choices[0].message.content);
     console.log("___");
     res.json(data);
     // return just the content of the response, which is the plain text report

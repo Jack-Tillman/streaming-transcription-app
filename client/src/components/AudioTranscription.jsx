@@ -103,15 +103,6 @@ const AudioTranscription = ({
           </div>
         </label>
       )}
-      {/* <label htmlFor="record" className="mic-button">
-          <div className="mic">
-            <div className="mic-button-loader"></div>
-            <div className="mic-base"></div>
-          </div>
-          <div className="button-message">
-            <span>{isRecording ? "STOP" : "START"}</span>
-          </div>
-        </label> */}
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React from "react";
+import "../styles/recentinsertionpage.css"
 
 const RecentInsertionPage = ({ databaseEntry }) => {
   const entry = databaseEntry ? Object.values(databaseEntry)[0][0] : null;
@@ -43,7 +44,7 @@ const RecentInsertionPage = ({ databaseEntry }) => {
   const data = parseClinicalSummary(clinicalSummary);
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div id="insertion-container">
       <header>
         <h1>Patient Information</h1>
         <div>

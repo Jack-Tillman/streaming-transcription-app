@@ -7,9 +7,9 @@ import { ShowJson } from "../components/ShowJson";
 import { ShowReport } from "../components/ShowReport";
 import TranscriptionForm from "../components/TranscriptionForm";
 import ReportForm from "../components/ReportForm";
-import RecentInsertionPage from "../components/RecentInsertionPage";
+// import RecentInsertionPage from "./RecentInsertionPage";
 
-export const Home = () => {
+export const Home = ({databaseEntry, setDatabaseEntry}) => {
   const [captions, setCaptions] = useState("");
   const [fullTranscription, setFullTranscription] = useState("");
   const [isRecording, setIsRecording] = useState(false);
@@ -17,11 +17,10 @@ export const Home = () => {
   const [report, setReport] = useState("");
   const [json, setJson] = useState("");
   const [showCaptions, setShowCaptions] = useState(true);
-  const [databaseEntry, setDatabaseEntry] = useState(null);
+
   return (
     <>
       <div id="home-container">
-        {databaseEntry && <RecentInsertionPage databaseEntry={databaseEntry}/>}
         {/* until a report is made, show captions and transcription */}
         {!report && showCaptions ? (
           <>
@@ -76,13 +75,3 @@ export const Home = () => {
     </>
   );
 };
-
-//  {/* {fullTranscription && !isRecording ? (
-//     <TranscriptionProcessor
-//       fullTranscription={fullTranscription}
-//       report={report}
-//       json={json}
-//       setJson={setJson}
-//       setReport={setReport}
-//     />
-//   ) : null} */}
