@@ -1,25 +1,26 @@
 import "../styles/home.css";
-import AudioTranscription from "../components/AudioTranscription";
-// import TranscriptionProcessor from "../components/TranscriptionProcessor";
-import InsertData from "../components/InsertData";
 import { useState } from "react";
-import { ShowJson } from "../components/ShowJson";
-import { ShowReport } from "../components/ShowReport";
 import TranscriptionForm from "../components/TranscriptionForm";
 import ReportForm from "../components/ReportForm";
 import Loading from "../components/Loading";
 import { useLoading } from "../contexts/LoadingContext";
-
-// import RecentInsertionPage from "./RecentInsertionPage";
-
-export const Home = ({databaseEntry, setDatabaseEntry}) => {
-  const [captions, setCaptions] = useState("");
-  const [fullTranscription, setFullTranscription] = useState("");
-  const [isRecording, setIsRecording] = useState(false);
-  const [showRecord, setShowRecord] = useState(true);
+export const Home = ({
+  databaseEntry,
+  setDatabaseEntry,
+  showCaptions,
+  setShowCaptions,
+  showRecord,
+  setShowRecord,
+  isRecording,
+  setIsRecording,
+  captions,
+  setCaptions,
+  fullTranscription,
+  setFullTranscription,
+  handleProgress
+}) => {
   const [report, setReport] = useState("");
   const [json, setJson] = useState("");
-  const [showCaptions, setShowCaptions] = useState(true);
   const { setLoading } = useLoading();
 
   return (
@@ -46,31 +47,23 @@ export const Home = ({databaseEntry, setDatabaseEntry}) => {
             setReport={setReport}
             setShowRecord={setShowRecord}
             showRecord={showRecord}
+            handleProgress={handleProgress}
           />
         ) : null}
 
         {/* after user makes report, render second form so they can edit the report */}
         {report && !isRecording ? (
-          <ReportForm report={report} setJson={setJson} json={json} databaseEntry={databaseEntry} setDatabaseEntry={setDatabaseEntry} />
+          <ReportForm
+            report={report}
+            setJson={setJson}
+            json={json}
+            databaseEntry={databaseEntry}
+            setDatabaseEntry={setDatabaseEntry}
+            handleProgress={handleProgress}
+          />
         ) : null}
 
-        <span id="response-containers" className="response-container">
-        </span>
-
-        <AudioTranscription
-          captions={captions}
-          setCaptions={setCaptions}
-          fullTranscription={fullTranscription}
-          setFullTranscription={setFullTranscription}
-          isRecording={isRecording}
-          setIsRecording={setIsRecording}
-          showCaptions={showCaptions}
-          setShowCaptions={setShowCaptions}
-          showRecord={showRecord}
-          setShowRecord={setShowRecord}
-        />
-
-        {/* {json && <InsertData json={json} />} */}
+        <span id="response-containers" className="response-container"></span>
       </div>
     </>
   );

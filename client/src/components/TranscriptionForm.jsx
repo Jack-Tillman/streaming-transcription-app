@@ -9,6 +9,7 @@ const TranscriptionForm = ({
   setReport,
   showRecord,
   setShowRecord,
+  handleProgress
 }) => {
   const [formData, setFormData] = useState({
     transcription: "", // Initialize with empty string
@@ -51,43 +52,46 @@ const TranscriptionForm = ({
       console.log("form 38 formdata", formData);
       const response = await chatWithGPT(formData);
       setReport(response);
+      handleProgress();
     } catch (error) {
       console.error("Error during submission:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
   return (
-    <form className="form transcription-form" onSubmit={handleSubmit}>
-      <label htmlFor="transcription" id="transcription-label">
-        Edit Your Transcription Below
-      </label>
-      <textarea
-        id="transcription-textarea"
-        className="form-textarea"
-        name="transcription"
-        value={formData.transcription}
-        onChange={handleChange}
-        required
-      />
-
-{isLoading ? (
+    <>
+      {isLoading ? (
         <Loading />
       ) : (
-        <button
-          type="submit"
-          className="submit-btn btn"
-          disabled={!isFormReady}
-          style={{
-            padding: "10px",
-            cursor: isFormReady ? "pointer" : "not-allowed",
-          }}
-        >
-          Make Report
-        </button>
+        <form className="form transcription-form" onSubmit={handleSubmit}>
+          <label htmlFor="transcription" id="transcription-label">
+            Edit Your Transcription Below
+          </label>
+          <textarea
+            id="transcription-textarea"
+            className="form-textarea"
+            name="transcription"
+            value={formData.transcription}
+            onChange={handleChange}
+            required
+          />
+
+          <button
+            type="submit"
+            className="submit-btn btn"
+            disabled={!isFormReady}
+            style={{
+              padding: "10px",
+              cursor: isFormReady ? "pointer" : "not-allowed",
+            }}
+          >
+            Make Report
+          </button>
+        </form>
       )}
-    </form>
+    </>
   );
 };
 

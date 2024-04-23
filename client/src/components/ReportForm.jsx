@@ -15,6 +15,7 @@ const ReportForm = ({
   json,
   databaseEntry,
   setDatabaseEntry,
+  handleProgress
 }) => {
   const [formData, setFormData] = useState({
     report: "",
@@ -45,6 +46,7 @@ const ReportForm = ({
         return;
       }
       const composition = await makeComposition(token, jsonResponse);
+      handleProgress();
       const recentComposition = await showComposition(token);
       setDatabaseEntry(recentComposition);
     } catch (error) {
@@ -58,24 +60,52 @@ const ReportForm = ({
       alert("Please fill in the report.");
       return;
     }
-    setLoading(true); // This triggers the Loading component to display
+    setLoading(true); 
     try {
       const response = await jsonGPT(formData);
       setJson(response);
       if (response) {
+        handleProgress();
         await handleProcessReport(response);
       }
     } catch (error) {
       console.error("Error during submission:", error);
     } finally {
-      setLoading(false); // Ensure to turn off the loading indicator when done
+      setLoading(false); 
     }
   };
 
   return (
     <>
-      {isLoading && <Loading />}
-      <form className="form report-form" onSubmit={handleSubmit}>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <form className="form report-form" onSubmit={handleSubmit}>
+          <label htmlFor="report" id="radiology-label">
+            Radiology Report
+          </label>
+          <textarea
+            id="report-textarea"
+            className="form-textarea"
+            name="report"
+            value={formData.report}
+            onChange={handleChange}
+            required
+          />
+          <button
+            type="submit"
+            className="submit-btn btn"
+            disabled={!isFormReady}
+            style={{
+              padding: "10px",
+              cursor: isFormReady ? "pointer" : "not-allowed",
+            }}
+          >
+            Insert Report
+          </button>
+        </form>
+      )}
+      {/* <form className="form report-form" onSubmit={handleSubmit}>
         <label htmlFor="report" id="radiology-label">
           Radiology Report
         </label>
@@ -98,7 +128,7 @@ const ReportForm = ({
         >
           Insert Report
         </button>
-      </form>
+      </form> */}
     </>
   );
 };

@@ -2,7 +2,7 @@ import React from "react";
 import "../styles/recentinsertionpage.css"
 import AudioTranscription from "../components/AudioTranscription";
 
-const RecentInsertionPage = ({ databaseEntry }) => {
+const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
   const entry = databaseEntry ? Object.values(databaseEntry)[0][0] : null;
   const clinicalSummary = entry ? entry.Clinical_summary.value : "";
 
@@ -49,13 +49,14 @@ const RecentInsertionPage = ({ databaseEntry }) => {
       <header>
         <h1>Patient Information</h1>
         <div>
-          <strong>Name:</strong> {/* Display patient name */}
+          <strong>Name:</strong> 
         </div>
         <div>
-          <strong>MRN:</strong> {/* Display MRN */}
+          <strong>MRN:</strong> 
         </div>
         <div>
-          <strong>Assessment Date:</strong> {/* Display assessment date */}
+          <strong>Assessment Date:</strong> 
+          <p>{data["TIME"]}</p>
         </div>
       </header>
       <main>
@@ -84,7 +85,7 @@ const RecentInsertionPage = ({ databaseEntry }) => {
         </section>
         <section>
           <h2>Clinical Summary</h2>
-          {/* Assuming Clinical Findings would be separately delineated within your data structure; adjust as necessary. */}
+
           <div>{data["Clinical_summary"]}</div>
         </section>
       </main>

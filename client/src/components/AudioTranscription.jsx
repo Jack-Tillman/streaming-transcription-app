@@ -14,6 +14,7 @@ const AudioTranscription = ({
   setShowCaptions,
   showRecord,
   setShowRecord,
+  handleProgress
 }) => {
   const socket = useRef(null);
   const microphone = useRef(null);
@@ -51,6 +52,7 @@ const AudioTranscription = ({
       setIsRecording(false);
       setShowCaptions(false);
       setShowRecord(false);
+      handleProgress();
       console.log("Stopped recording.");
     } else {
       try {
