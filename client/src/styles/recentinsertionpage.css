@@ -2,6 +2,22 @@
     display:flex;
     flex-direction: column;
     gap:2rem;
-    align-items:center;
-    justify-content: center;
+    padding:1rem;
+  }
+
+  #patient-summary {
+    flex-basis: 0px;
+    flex-grow: 1;
+    max-width: 100%;
+    position: relative;
+    width: 100%;
+    padding-top:1rem;
+    box-sizing:border-box;
+    font-size:1rem;
+    color: rgb(80,80,82);
+    white-space: nowrap;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
