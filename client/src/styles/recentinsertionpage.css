@@ -3,8 +3,15 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+/* Global adjustments */
+#insertion-container {
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  line-height: 1.5;
+  background-color: rgb(233, 233, 233);
   color:black;
-  background-color: rgb(255, 255, 255);
 }
 
 ol {
@@ -49,12 +56,7 @@ font-size:1.25rem;
   color: #000;
 }
 
-/* Global adjustments */
-#insertion-container {
-  font-family: 'Arial', sans-serif;
-  color: #333;
-  line-height: 1.5;
-}
+
 
 /* Styles for the main content sections */
 .entry-main h2 {

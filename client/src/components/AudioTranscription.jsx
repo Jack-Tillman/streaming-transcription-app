@@ -81,7 +81,7 @@ const AudioTranscription = ({
   };
 
   return (
-    <div className="content">
+    <span className="content">
       <input
         type="checkbox"
         id="record"
@@ -101,7 +101,7 @@ const AudioTranscription = ({
           </div>
         </label>
       )}
-    </div>
+    </span>
   );
 };
 

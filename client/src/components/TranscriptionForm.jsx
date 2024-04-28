@@ -9,7 +9,7 @@ const TranscriptionForm = ({
   setReport,
   showRecord,
   setShowRecord,
-  handleProgress
+  handleProgress,
 }) => {
   const [formData, setFormData] = useState({
     transcription: "", // Initialize with empty string
@@ -77,7 +77,6 @@ const TranscriptionForm = ({
             onChange={handleChange}
             required
           />
-
           <button
             type="submit"
             className="submit-btn btn"

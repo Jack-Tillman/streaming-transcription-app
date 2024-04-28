@@ -105,30 +105,6 @@ const ReportForm = ({
           </button>
         </form>
       )}
-      {/* <form className="form report-form" onSubmit={handleSubmit}>
-        <label htmlFor="report" id="radiology-label">
-          Radiology Report
-        </label>
-        <textarea
-          id="report-textarea"
-          className="form-textarea"
-          name="report"
-          value={formData.report}
-          onChange={handleChange}
-          required
-        />
-        <button
-          type="submit"
-          className="submit-btn btn"
-          disabled={!isFormReady}
-          style={{
-            padding: "10px",
-            cursor: isFormReady ? "pointer" : "not-allowed",
-          }}
-        >
-          Insert Report
-        </button>
-      </form> */}
     </>
   );
 };

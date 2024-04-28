@@ -4,9 +4,12 @@
     flex-direction: column;
     gap: 20px;
     max-width: 600px;
-    border: 2.5px solid white;
+    border: 0.125rem solid #3f47b1;
+    border-radius:2%;
     padding:1rem;
-    margin-top:2rem;
+    margin:2rem auto 0 auto;
+    justify-content: center;
+    /* background-color: rgb(199, 210, 231); */
 }
 
 #radiology-label {
@@ -18,6 +21,7 @@
 #transcription-label {
     color:#3f47b1;
     font-size:1.25rem;
+    text-align: center;
     font-weight:600;
 }
 
@@ -28,5 +32,34 @@
     width:100%;
     min-height:500px;
     min-width: 390px;
+    border-radius:1%;
+    border:0.25px solid white;
+    padding:0.5rem;
+    
 }
 
+.submit-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 3rem;
+    min-width: 3rem;
+    max-height: 10rem;
+    max-width: 10rem;
+    transition: transform 0.4s;
+    transform-style: preserve-3d;
+    position: relative;
+    background-color: #c0ffd0;
+    border: 0.15rem solid #3fb15b;
+    border-radius: 5rem;
+    margin: 0 auto;
+    font-weight: 700;
+}
+
+.submit-btn:hover {
+    background-color:#3fb15b;
+    border: 0.15rem solid #c0ffd0;
+    color: rgb(255, 255, 255);
+    font-weight: 700;
+}

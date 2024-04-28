@@ -1,9 +1,9 @@
 .content {
     display: flex;
-    min-height: 10vh;
+    min-height: 0vh;
     align-items: center;
     flex-direction: column;
-    margin: 2rem auto 0rem auto;
+    margin: 0rem auto 0rem auto;
 }
 
 
@@ -46,7 +46,7 @@
 .button-message {
     position: absolute;
     width: 50px;
-    color: #fff;
+    color: #26af2d;
     font-family: "Arimo", sans-serif;
     font-weight: 700;
     font-size: 25px;
@@ -76,7 +76,7 @@
 
 .mic {
     position: relative;
-    top: -17px;
+    top: -33.5px;
     border: 20px solid #47aca9;
     height: 48px;
     width: 0;
