@@ -33,13 +33,13 @@ const App = () => {
           "@class": "DV_TEXT",
           "value": "Comparison radiographs available from March 16, 2021."
         },
-        "impression": {
+        "impressions": {
           "@class": "DV_TEXT",
           "value": "1. No fracture or osteopathology. 2. Mild facet anthropathy at L5-S1 bilaterally."
         },
         "Clinical_summary": {
           "@class": "DV_TEXT",
-          "value": "EXAM: Lumbar spine, two views, anterior, posterior lateral, flexion extension views. HISTORY: Patient has a history of back pain. TECHNIQUE: APM lateral flexion extension views of the lumbar spine. COMPARISON: Comparison radiographs available from March 16, 2021. FINDINGS: 1. No fractures identified. 2. Normal bone density. IMPRESSION: 1. No fracture or osteopathology. 2. Mild facet anthropathy at L5-S1 bilaterally."
+          "value": "EXAM: Lumbar spine, two views, anterior, posterior lateral, flexion extension views. HISTORY: Patient has a history of back pain. TECHNIQUE: APM lateral flexion extension views of the lumbar spine. COMPARISON: Comparison radiographs available from March 16, 2021. FINDINGS: 1. No fractures identified. 2. Normal bone density. IMPRESSIONS: 1. No fracture or osteopathology. 2. Mild facet anthropathy at L5-S1 bilaterally."
         }
       }
     ],
@@ -69,13 +69,13 @@ const App = () => {
           "@class": "DV_TEXT",
           "value": "Comparison radiographs available from March 16, 2021."
         },
-        "impression": {
+        "impressions": {
           "@class": "DV_TEXT",
           "value": "1. No fracture or osteopathology. 2. Mild facet anthropathy at L5-S1 bilaterally."
         },
         "Clinical_summary": {
           "@class": "DV_TEXT",
-          "value": "EXAM: Lumbar spine, two views, anterior, posterior lateral, flexion extension views. HISTORY: Patient has a history of back pain. TECHNIQUE: APM lateral flexion extension views of the lumbar spine. COMPARISON: Comparison radiographs available from March 16, 2021. FINDINGS: 1. No fractures identified. 2. Normal bone density. IMPRESSION: 1. No fracture or osteopathology. 2. Mild facet anthropathy at L5-S1 bilaterally."
+          "value": "EXAM: Lumbar spine, two views, anterior, posterior lateral, flexion extension views. HISTORY: Patient has a history of back pain. TECHNIQUE: APM lateral flexion extension views of the lumbar spine. COMPARISON: Comparison radiographs available from March 16, 2021. FINDINGS: 1. No fractures identified. 2. Normal bone density. IMPRESSIONS: 1. No fracture or osteopathology. 2. Mild facet anthropathy at L5-S1 bilaterally."
         }
       }
     ]
