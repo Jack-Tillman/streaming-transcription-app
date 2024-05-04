@@ -8,7 +8,8 @@ import {
 import "../styles/forms.css";
 import { useLoading } from "../contexts/LoadingContext";
 import Loading from "./Loading";
-
+import Textfield  from "./Textfield";
+import OutlinedButtons from "./Button";
 const ReportForm = ({
   report,
   setJson,
@@ -84,25 +85,19 @@ const ReportForm = ({
           <label htmlFor="report" id="radiology-label">
             Radiology Report
           </label>
-          <textarea
-            id="report-textarea"
-            className="form-textarea"
-            name="report"
+          <Textfield 
+            id="fullWidth"
+            label="Report"
+            variant="outlined"
             value={formData.report}
             onChange={handleChange}
-            required
           />
-          <button
-            type="submit"
-            className="submit-btn btn"
-            disabled={!isFormReady}
-            style={{
-              padding: "10px",
-              cursor: isFormReady ? "pointer" : "not-allowed",
-            }}
-          >
-            Insert Report
-          </button>
+            <OutlinedButtons 
+          type="submit"
+          disabled={!isFormReady}
+          text={"Insert Into Database"}
+        
+          />
         </form>
       )}
     </>

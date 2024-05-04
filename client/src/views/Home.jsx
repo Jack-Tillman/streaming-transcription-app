@@ -4,6 +4,7 @@ import TranscriptionForm from "../components/TranscriptionForm";
 import ReportForm from "../components/ReportForm";
 import Loading from "../components/Loading";
 import { useLoading } from "../contexts/LoadingContext";
+import OutlinedCard from "../components/Card";
 export const Home = ({
   databaseEntry,
   setDatabaseEntry,
@@ -17,7 +18,7 @@ export const Home = ({
   setCaptions,
   fullTranscription,
   setFullTranscription,
-  handleProgress
+  handleProgress,
 }) => {
   const [report, setReport] = useState("");
   const [json, setJson] = useState("");
@@ -29,15 +30,8 @@ export const Home = ({
         {/* until a report is made, show captions and transcription */}
         {!report && showCaptions ? (
           <>
-            <div className="captions" id="captions">
-              <span id="realtime-caption">
-                {captions ? captions : "Your speech shows up here"}
-              </span>
-            </div>
-            <div className="full-transcription">
-              <h2 id="left-h2">Full transcription Below</h2>
-              <span id="full-transcription">{fullTranscription}</span>
-            </div>
+            <OutlinedCard captions={captions} fullTranscription={fullTranscription}/>
+           
           </>
         ) : null}
         {/* user has recorded transcription and reformatted it, show form of their transcription */}

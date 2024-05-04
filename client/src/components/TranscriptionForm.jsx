@@ -3,6 +3,8 @@ import { chatWithGPT } from "../api/api";
 import "../styles/forms.css";
 import { useLoading } from "../contexts/LoadingContext";
 import Loading from "./Loading";
+import Textfield  from "./Textfield";
+import OutlinedButtons from "./Button";
 
 const TranscriptionForm = ({
   fullTranscription,
@@ -69,15 +71,30 @@ const TranscriptionForm = ({
           <label htmlFor="transcription" id="transcription-label">
             Edit Your Transcription Below
           </label>
-          <textarea
+
+          <Textfield
+            id="fullWidth"
+            label="Transcription"
+            variant="outlined"
+            value={formData.transcription}
+            onChange={handleChange}
+          />
+
+          {/* <textarea
             id="transcription-textarea"
             className="form-textarea"
             name="transcription"
             value={formData.transcription}
             onChange={handleChange}
             required
+          /> */}
+          <OutlinedButtons 
+          type="submit"
+          disabled={!isFormReady}
+          text={"Make Report"}
+        
           />
-          <button
+          {/* <button
             type="submit"
             className="submit-btn btn"
             disabled={!isFormReady}
@@ -87,7 +104,7 @@ const TranscriptionForm = ({
             }}
           >
             Make Report
-          </button>
+          </button> */}
         </form>
       )}
     </>
@@ -95,3 +112,11 @@ const TranscriptionForm = ({
 };
 
 export default TranscriptionForm;
+
+
+/* 
+
+"X-ray of the lumbar and sacral spine. Patient present with a history of poor posture and pain in the left hip. X-ray imaging was utilized. Prior x-ray dated March 16 2022 available for comparison? Findings. 1. Pelican leveling is present, prominent on the right side. 2 mild level scoliosis at the thoraculumbar region to the right, with Apex atlone 3. S 1 exhibits mild transitional signal characteristics but appears to be functionally sacrum. 4 No abnormality detected in the sacroiliac joints bilaterally. 5, mild left posterior pelvic rotation observed, 6 Schmorals nodes present at l3dash4disclevel. 7 Sacral Schmorals nodes also noted at l3dash4. 8 disguise are maintained? 9 No acute fracture or osteopathology noted. Impressions, 1. Pastural changes are visible. To mild low scoliosis, the Thraculumbar region to the right? 3. Presence of Schmarshal's note at the L3 dash 4 disc level. "
+
+
+*/

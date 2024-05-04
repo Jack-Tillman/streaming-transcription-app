@@ -4,7 +4,8 @@ import RecentInsertionPage from "./views/RecentInsertionPage";
 import { LoadingProvider } from "./contexts/LoadingContext";
 import AudioTranscription from "./components/AudioTranscription";
 import LinearWithValueLabel from "./components/ProgressBar";
-import "./styles/app.css"
+
+import "./styles/app.css";
 
 const App = () => {
   const [databaseEntry, setDatabaseEntry] = useState(null);
@@ -25,43 +26,48 @@ const App = () => {
   return (
     <>
       <LoadingProvider>
-        {databaseEntry ? (
-          <RecentInsertionPage
-            databaseEntry={databaseEntry}
-            handleProgress={handleProgress}
-          />
-        ) : (
-          <Home
-            isRecording={isRecording}
-            setIsRecording={setIsRecording}
-            captions={captions}
-            setCaptions={setCaptions}
-            fullTranscription={fullTranscription}
-            setFullTranscription={setFullTranscription}
-            showRecord={showRecord}
-            setShowRecord={setShowRecord}
-            databaseEntry={databaseEntry}
-            setDatabaseEntry={setDatabaseEntry}
-            showCaptions={showCaptions}
-            setShowCaptions={setShowCaptions}
-            handleProgress={handleProgress}
-          />
-        )}
-       
-        <AudioTranscription
-          captions={captions}
-          setCaptions={setCaptions}
-          fullTranscription={fullTranscription}
-          setFullTranscription={setFullTranscription}
-          isRecording={isRecording}
-          setIsRecording={setIsRecording}
-          showCaptions={showCaptions}
-          setShowCaptions={setShowCaptions}
-          showRecord={showRecord}
-          setShowRecord={setShowRecord}
-          handleProgress={handleProgress}
-        />
-         <LinearWithValueLabel progress={progress} />
+        <div id="app-wrapper">
+          <div id="background-image"></div>
+          <div id="app-container">
+            {databaseEntry ? (
+              <RecentInsertionPage
+                databaseEntry={databaseEntry}
+                handleProgress={handleProgress}
+              />
+            ) : (
+              <Home
+                isRecording={isRecording}
+                setIsRecording={setIsRecording}
+                captions={captions}
+                setCaptions={setCaptions}
+                fullTranscription={fullTranscription}
+                setFullTranscription={setFullTranscription}
+                showRecord={showRecord}
+                setShowRecord={setShowRecord}
+                databaseEntry={databaseEntry}
+                setDatabaseEntry={setDatabaseEntry}
+                showCaptions={showCaptions}
+                setShowCaptions={setShowCaptions}
+                handleProgress={handleProgress}
+              />
+            )}
+
+            <AudioTranscription
+              captions={captions}
+              setCaptions={setCaptions}
+              fullTranscription={fullTranscription}
+              setFullTranscription={setFullTranscription}
+              isRecording={isRecording}
+              setIsRecording={setIsRecording}
+              showCaptions={showCaptions}
+              setShowCaptions={setShowCaptions}
+              showRecord={showRecord}
+              setShowRecord={setShowRecord}
+              handleProgress={handleProgress}
+            />
+            <LinearWithValueLabel progress={progress} />
+          </div>
+        </div>
       </LoadingProvider>
     </>
   );

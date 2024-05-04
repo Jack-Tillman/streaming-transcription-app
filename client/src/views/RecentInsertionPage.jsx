@@ -90,15 +90,13 @@ const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
 
     if (summaryJSX["IMPRESSION"]) {
       summaryJSX["IMPRESSION"] = renderListItems(summaryJSX["IMPRESSION"]);
-    } else if (summaryJSX["IMPRESSIONS"]) {
-      summaryJSX["IMPRESSIONS"] = renderListItems(summaryJSX["IMPRESSIONS"]);
     } 
 
     return summaryJSX;
   };
 
-  const data = parseClinicalSummary(clinicalSummary, formattedTime); // Pass the time value to the function
-  console.log(data); // This will now include the time as well as other sections
+  const data = parseClinicalSummary(clinicalSummary, formattedTime);
+  console.log(data); 
 
   const renderListItems = (text) => {
     return text.split(/(?=\d\. )/).map((item, index) => (
@@ -172,6 +170,7 @@ const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
               </div>
             </section>
           )}
+          
 
         {/* Clinical Summary Sections */}
         <section className="entry-section examination-results">
@@ -246,7 +245,7 @@ const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
               </div>
             </section>
           )}
-          {summaryJSX["IMPRESSIONS"] && (
+          {/* {summaryJSX["IMPRESSIONS"] && (
             <section
               className="entry-section impressions"
               style={{ borderTop: "0px" }}
@@ -261,7 +260,7 @@ const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
                 </span>
               </div>
             </section>
-          )}
+          )} */}
         </section>
       </main>
     </div>
