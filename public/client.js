@@ -1,8 +1,10 @@
+
+
 import {
   transformRadiologyReport,
   getBetterToken,
   makeComposition,
-} from "./utils.js";
+} from "../client/src/utils/utils.js";
 
 const captions = window.document.getElementById("captions");
 const fullTranscription = window.document.getElementById("full-transcription");
@@ -15,6 +17,7 @@ const gptResponseEl = document.getElementById("gpt-response");
 const jsonResponseEl = document.getElementById("json-response");
 const betterResponseEl = document.getElementById("better-response");
 const ehrResponseEl = document.getElementById("ehr-response");
+
 /* Microphone functions */
 
 async function getMicrophone() {
@@ -202,7 +205,7 @@ document.getElementById("ehr-button").addEventListener("click", async () => {
 });
 
 window.addEventListener("load", () => {
-  const socket = new WebSocket("ws://localhost:3000");
+  const socket = new WebSocket("ws://localhost:3001");
 
   socket.addEventListener("open", async () => {
     console.log("client: connected to server");

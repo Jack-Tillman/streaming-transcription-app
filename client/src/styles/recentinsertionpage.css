@@ -1,0 +1,127 @@
+/* Styles related to the document header */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Global adjustments */
+#insertion-container {
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  line-height: 1.5;
+  background-color: rgb(233, 233, 233);
+  color:black;
+}
+
+ol {
+  list-style: none;
+}
+
+.document-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.document-title {
+  font-family: 'Times New Roman', serif;
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom:0.25rem;
+}
+
+.document-metadata {
+  text-align: right;
+}
+#patient-summary{
+font-weight:700;
+font-size:1.25rem;
+
+}
+.metadata-item {
+  margin: 0 1rem 1rem 0; 
+  text-align: left;
+}
+
+.metadata-title {
+  font-weight: bold;
+  color: #555;
+  margin-right: 5px;
+}
+
+.metadata-content {
+  color: #000;
+}
+
+
+
+/* Styles for the main content sections */
+.entry-main h2 {
+  font-family: 'Arial', sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin:1.5rem 0 1.5rem 5rem;
+  padding-left:1rem;
+}
+
+.entry-main {
+  display:flex;
+  flex-direction: column;
+  max-width:85vw;
+  margin: 0 auto;
+
+}
+
+/* Main content sections general style */
+.entry-section {
+  border-top: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 20px;
+  padding-left: 10px;
+}
+
+.section-title {
+  font-family: 'Arial', sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+
+}
+
+
+.section-row {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 1rem;
+  
+}
+
+.section-row2 {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  margin-bottom: 1rem;
+}
+
+.section-label {
+  width: 20rem;
+  margin: 0 auto;
+  color: #555;
+  text-align: left;
+}
+
+.section-text {
+  flex: 1; /* Take available space */
+  text-align: left;
+  max-width: 65%;
+}
+
+/* Specific styles for impressions and clinical summary sections */
+.impressions .section-text,
+.clinical-summary .section-text {
+  white-space: pre-line; 
+}
+
