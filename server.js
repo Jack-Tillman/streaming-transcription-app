@@ -8,7 +8,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 dotenv.config();
-const { OPENAI_API_KEY, BETTERUSER, BETTERPASS } = process.env;
+const { OPENAI_API_KEY, BETTERUSER, BETTERPASS, DEEPGRAM_API_KEY } = process.env;
+console.log(DEEPGRAM_API_KEY);
 
 const app = express();
 const server = http.createServer(app);
