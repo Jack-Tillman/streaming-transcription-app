@@ -3,7 +3,7 @@ import { chatWithGPT } from "../api/api";
 import "../styles/forms.css";
 import { useLoading } from "../contexts/LoadingContext";
 import Loading from "./Loading";
-import Textfield  from "./Textfield";
+import Textfield from "./Textfield";
 import OutlinedButtons from "./Button";
 
 const TranscriptionForm = ({
@@ -80,31 +80,11 @@ const TranscriptionForm = ({
             onChange={handleChange}
           />
 
-          {/* <textarea
-            id="transcription-textarea"
-            className="form-textarea"
-            name="transcription"
-            value={formData.transcription}
-            onChange={handleChange}
-            required
-          /> */}
-          <OutlinedButtons 
-          type="submit"
-          disabled={!isFormReady}
-          text={"Make Report"}
-        
-          />
-          {/* <button
+          <OutlinedButtons
             type="submit"
-            className="submit-btn btn"
             disabled={!isFormReady}
-            style={{
-              padding: "10px",
-              cursor: isFormReady ? "pointer" : "not-allowed",
-            }}
-          >
-            Make Report
-          </button> */}
+            text={"Make Report"}
+          />
         </form>
       )}
     </>
@@ -112,7 +92,6 @@ const TranscriptionForm = ({
 };
 
 export default TranscriptionForm;
-
 
 /* 
 

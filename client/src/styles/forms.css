@@ -5,9 +5,9 @@
     gap: 20px;
     max-width: 50rem;
     max-height:60rem;
-    border: 0.125rem solid #3f47b1;
+    border: 0.125rem solid rgb(40, 155, 255);
     padding:1rem;
-    background: rgb(255, 251, 237);
+    background: rgb(248, 255, 243);
     margin:2rem auto 0 auto;
     justify-content: center;
     border-radius: 50px;
@@ -19,14 +19,14 @@
 }
 
 #radiology-label {
-    color:#3f47b1;
+    color:rgb(40, 155, 255);
     font-size:1.25rem;
     font-weight:600;
     margin: 0 auto;
 }
 
 #transcription-label {
-    color:#3f47b1;
+    color:rgb(40, 155, 255);
     font-size:1.25rem;
     text-align: center;
     font-weight:600;
