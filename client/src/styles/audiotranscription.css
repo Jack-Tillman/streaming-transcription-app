@@ -21,8 +21,7 @@
     flex-direction: column;
     margin-bottom: 5rem;
     gap: 16px;
-    margin: 1rem auto;
-    /* perspective: 500px; */
+    /* margin: 1rem auto;  */
 }
 
 .mic-button {
@@ -55,7 +54,7 @@
     transform: rotateY(0deg);
     pointer-events: none;
     left: 58px;
-    top: 71px;
+    top: 80px;
 }
 
 .mic-button-loader {

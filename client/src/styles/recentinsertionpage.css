@@ -11,7 +11,7 @@
   color: #333;
   line-height: 1.5;
   background-color: rgb(233, 233, 233);
-  color:black;
+  color: black;
 }
 
 ol {
@@ -30,19 +30,21 @@ ol {
   font-size: 24px;
   font-weight: bold;
   color: #000;
-  margin-bottom:0.25rem;
+  margin-bottom: 0.25rem;
 }
 
 .document-metadata {
   text-align: right;
 }
-#patient-summary{
-font-weight:700;
-font-size:1.25rem;
+
+#patient-summary {
+  font-weight: 700;
+  font-size: 1.25rem;
 
 }
+
 .metadata-item {
-  margin: 0 1rem 1rem 0; 
+  margin: 0 1rem 1rem 0;
   text-align: left;
 }
 
@@ -63,14 +65,14 @@ font-size:1.25rem;
   font-family: 'Arial', sans-serif;
   font-size: 1.5rem;
   font-weight: bold;
-  margin:1.5rem 0 1.5rem 5rem;
-  padding-left:1rem;
+  margin: 1.5rem 0 1.5rem 5rem;
+  padding-left: 1rem;
 }
 
 .entry-main {
-  display:flex;
+  display: flex;
   flex-direction: column;
-  max-width:85vw;
+  max-width: 85vw;
   margin: 0 auto;
 
 }
@@ -96,7 +98,7 @@ font-size:1.25rem;
   display: flex;
   align-items: baseline;
   margin-bottom: 1rem;
-  
+
 }
 
 .section-row2 {
@@ -114,7 +116,7 @@ font-size:1.25rem;
 }
 
 .section-text {
-  flex: 1; /* Take available space */
+  flex: 1;
   text-align: left;
   max-width: 65%;
 }
@@ -122,6 +124,5 @@ font-size:1.25rem;
 /* Specific styles for impressions and clinical summary sections */
 .impressions .section-text,
 .clinical-summary .section-text {
-  white-space: pre-line; 
+  white-space: pre-line;
 }
-
