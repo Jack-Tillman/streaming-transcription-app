@@ -31,9 +31,9 @@ export default function LinearWithValueLabel({ progress }) {
     if (progress === 25) {
       return "Making your report now...";
     } else if (progress === 50) {
-      return "Converting report into appropriate file type...";
+      return "Starting process to insert report into the database...";
     } else if (progress === 75) {
-      return "Inserting report into the database...";
+      return "Nearly finished inserting report into the database...";
     } else if (progress === 100) {
       return "Insertion complete!";
     } else {
