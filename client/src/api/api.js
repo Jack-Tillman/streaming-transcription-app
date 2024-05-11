@@ -8,7 +8,8 @@ export const chatWithGPT = async (content) => {
       if (!response.ok) throw new Error("Network response was not ok.");
       const data = await response.json();
       if (data) {
-        return data.choices[0].message.content;
+        console.log('report data is:', data);
+        return data.content[0];
       } else {
         console.error("Error while setting your report.");
       }
@@ -29,7 +30,8 @@ export const chatWithGPT = async (content) => {
       const data = await response.json();
       console.log("JSON creation successful:", data);
       if (data) {
-        return data.choices[0].message.content;
+        console.log(data);
+        return data;
       } else {
         console.error("Error while setting json.");
       }

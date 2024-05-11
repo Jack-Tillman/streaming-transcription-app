@@ -23,7 +23,10 @@ export async function getBetterToken() {
 
 export async function makeComposition(token, jsonString) {
   try {
+    //current error location
+    console.log('jsonString is:', jsonString);
     const inputObject = JSON.parse(jsonString);
+
     //convert to target json fields for ehr insertion
     const targetInput = transformRadiologyReport(inputObject);
     const raw = JSON.stringify(targetInput);

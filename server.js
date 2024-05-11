@@ -8,7 +8,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 dotenv.config();
-const { OPENAI_API_KEY, BETTERUSER, BETTERPASS, DEEPGRAM_API_KEY } = process.env;
+const { OPENAI_API_KEY, BETTERUSER, BETTERPASS, DEEPGRAM_API_KEY, COMPLIANT_CHAT_GPT_KEY } = process.env;
 console.log(DEEPGRAM_API_KEY);
 
 const app = express();
@@ -118,14 +118,17 @@ app.post("/api/createReport", async (req, res) => {
   try {
     const { content } = req.body;
     console.log("server report content is:", content);
+    console.log("compliantkey is", COMPLIANT_CHAT_GPT_KEY);
+    console.log('openaikey is', OPENAI_API_KEY);
     const stringContent = JSON.stringify(content);
     console.log(stringContent)
     console.log(typeof stringContent);
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("https://api.compliantchatgpt.com/v1/chat/completions", {
       method: "POST",
       headers: {
+        "x-compliantchatgpt-key": `${COMPLIANT_CHAT_GPT_KEY}`,
+        "x-openai-key": `${OPENAI_API_KEY}`,
         "Content-Type": "application/json",
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
         model: "gpt-4",
@@ -133,19 +136,18 @@ app.post("/api/createReport", async (req, res) => {
           {
             role: "system",
 
-            content: `Your role is to assist users in formatting unstructured medical dictations into proper radiology report format. A properly formatted radiology report features 6 main headers EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, IMPRESSIONS). When a user asks you to produce a radiology report from provided information, take a moment to read and analyze the medical dictation, making note of information that could fall into the following six categories: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, and IMPRESSION. After analysis is complete, produce a properly formatted radiology report based off the analysis of the medical dictation. Make sure the report consists of only the following 6 subsections in the following order: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, and IMPRESSION. Do not make additional subheaders beyond the aforementioned six subsections. Information for TECHNIQUE should state just the technique used without usage of past participles or verbs and should be a sentence fragment. Information under the FINDINGS and IMPRESSIONS fields should be formatted as a numeric list. Information under EXAM, HISTORY, TECHNIQUE, and COMPARISON should be formatted as plain text without any listing at all. If information is not provided for HISTORY or COMPARISON, insert either 'Not available' or 'None' respectively.  Use examples as templates for formatting and ensure the output aligns with radiology reporting standards. Avoid giving medical advice or diagnoses unless explicitly requested by the user in the context of a report format suggestion. Ask for clarification when necessary, tailor your responses to be concise, professional, and friendly, mirroring the precision required in medical documentation while maintaining an engaging interaction.`,
+            content: `Your role is to assist users in formatting unstructured medical dictations into proper radiology report format. A properly formatted radiology report features 6 main headers: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, and IMPRESSIONS. When a user asks you to produce a radiology report from provided information, take a moment to read and analyze the medical dictation, making note of information that could fall into the following six categories: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, and IMPRESSIONS. After analysis is complete, produce a properly formatted radiology report based off the analysis of the medical dictation. Make sure the report consists of only the following 6 subsections in the following order: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, and IMPRESSIONS. Do not make additional subheaders beyond the aforementioned six subsections. Information for TECHNIQUE should state just the technique used without usage of past participles or verbs and should be a sentence fragment. Information under the FINDINGS and IMPRESSIONS fields should be formatted as a numeric list. Information under EXAM, HISTORY, TECHNIQUE, and COMPARISON should be formatted as plain text without any listing at all. If information is not provided for HISTORY or COMPARISON, insert either 'Not available' or 'None' respectively.  Use examples as templates for formatting and ensure the output aligns with radiology reporting standards. Avoid giving medical advice or diagnoses unless explicitly requested by the user in the context of a report format suggestion. Ask for clarification when necessary, tailor your responses to be concise, professional, and friendly, mirroring the precision required in medical documentation while maintaining an engaging interaction.`,
           },
           {
             role: "user",
             content: `Please produce a radiology report from the following information:  ${stringContent}`,
           },
         ],
-        temperature: 0.7,
       }),
     });
     const data = await response.json();
     if(data){
-      console.log('server data is', data);
+      console.log('created report is', data);
     }else {
       console.log('no server data')
       console.log(response);
@@ -156,11 +158,11 @@ app.post("/api/createReport", async (req, res) => {
     console.log("");
     console.log("");
     console.log("___");
-    // console.log(data.choices[0].message.content);
+    console.log(data.content[0]);
     console.log("___");
     res.json(data);
     // return just the content of the response, which is the plain text report
-    return data.choices[0].message.content;
+    return data;
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -177,11 +179,12 @@ app.post("/api/createJson", async (req, res) => {
     console.log(stringContent)
     console.log(typeof stringContent);
   
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("https://api.compliantchatgpt.com/v1/chat/completions", {
       method: "POST",
       headers: {
+        "x-compliantchatgpt-key": `${COMPLIANT_CHAT_GPT_KEY}`,
+        "x-openai-key": `${OPENAI_API_KEY}`,
         "Content-Type": "application/json",
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
         model: "gpt-4",
@@ -189,14 +192,14 @@ app.post("/api/createJson", async (req, res) => {
           {
             role: "system",
 
-            content: `Your role is to assist users in converting Radiology reports in plaintext format into JSON format. The response to the user should resemble the following JSON format:{"exam": exam, "history": history,"technique": technique, "comparison": comparison,"findings": findings,"impressions": impressions, "clinical_summary":clinical_summary}, with fields not in quotations being filled by the relevant content from the information given by the user. The response should not include any extraneous information aside from the JSON data. When a user asks you to convert a radiology report into JSON, take a moment to read and analyze the given information, making note of information that could fall into the following six categories: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, and IMPRESSION. For CLINICAL_SUMMARY, the key-value should be the entire radiology report given by user formatted as a single line string. After analysis is complete, produce a JSON version of the file based off the analysis of the given information. Make sure the JSON consists of only the following 7 subsections in the following order: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, IMPRESSION, and CLINICAL_SUMMARY. Do not make additional subheaders beyond the aforementioned seven subsections. JSON key-values should all be one lined strings. If a report features multiple entries under a single header, the multiple entries should be converted to a single line string with a period and a space separating each entry. Do not use arrays in the JSON. Do not include any new words or remove words from the radiology report when making the JSON. Use examples as templates for formatting and ensure the output aligns with typical JSON conventions. Avoid giving medical advice or diagnoses unless explicitly requested by the user in the context of a report format suggestion.`,
+            content: `Your role is to assist users in converting Radiology reports in plaintext format into JSON format. The response to the user should resemble the following JSON format:{"exam": exam, "history": history,"technique": technique, "comparison": comparison,"findings": findings,"impressions": impressions, "clinical_summary":clinical_summary}, with fields not in quotations being filled by the relevant content from the information given by the user. The response should not include any extraneous information aside from the JSON data. When a user asks you to convert a radiology report into JSON, take a moment to read and analyze the given information, making note of information that could fall into the following six categories: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, and IMPRESSIONS. For CLINICAL_SUMMARY, the key-value should be the entire radiology report given by user formatted as a single line string. After analysis is complete, produce a JSON version of the file based off the analysis of the given information. Make sure the JSON consists of only the following 7 subsections in the following order: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, IMPRESSIONS, and CLINICAL_SUMMARY. Do not make additional subheaders beyond the aforementioned seven subsections. JSON key-values should all be one lined strings. If a report features multiple entries under a single header, the multiple entries should be converted to a single line string with a period and a space separating each entry. Do not use arrays in the JSON. Do not include any new words or remove words from the radiology report when making the JSON. Use examples as templates for formatting and ensure the output aligns with typical JSON conventions. Avoid giving medical advice or diagnoses unless explicitly requested by the user in the context of a report format suggestion.`,
           },
           {
             role: "user",
-            content: `Please convert the following radiology report into JSON format with only 7 keys: exam, history, technique, comparison, findings, impression, and clinical_summary. ${stringContent}`,
+            content: `Please convert the following radiology report into JSON format with only 7 keys: exam, history, technique, comparison, findings, impressions, and clinical_summary. ${stringContent}`,
           },
         ],
-        temperature: 0.7,
+        // temperature: 0.7,
       }),
     });
     const data = await response.json();
@@ -204,16 +207,17 @@ app.post("/api/createJson", async (req, res) => {
     console.log("");
     console.log("");
     console.log("___");
-    console.log(data.choices[0].message.content);
+    console.log(data);
     console.log("___");
     res.json(data);
     // return just the content of the response, which is the plain text report
-    return data.choices[0].message.content;
+    return data;
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 /* API call to Better to get access token */
 app.post("/api/token", async (req, res) => {
@@ -317,3 +321,111 @@ app.post("/api/getComposition", async (req, res) => {
 server.listen(3001, () => {
   console.log("Server is listening on port 3001");
 });
+
+/* 
+
+
+app.post("/api/createReport", async (req, res) => {
+  try {
+    const { content } = req.body;
+    console.log("server report content is:", content);
+    const stringContent = JSON.stringify(content);
+    console.log(stringContent)
+    console.log(typeof stringContent);
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "system",
+
+            content: `Your role is to assist users in formatting unstructured medical dictations into proper radiology report format. A properly formatted radiology report features 6 main headers EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, IMPRESSIONS). When a user asks you to produce a radiology report from provided information, take a moment to read and analyze the medical dictation, making note of information that could fall into the following six categories: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, and IMPRESSION. After analysis is complete, produce a properly formatted radiology report based off the analysis of the medical dictation. Make sure the report consists of only the following 6 subsections in the following order: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, and IMPRESSION. Do not make additional subheaders beyond the aforementioned six subsections. Information for TECHNIQUE should state just the technique used without usage of past participles or verbs and should be a sentence fragment. Information under the FINDINGS and IMPRESSIONS fields should be formatted as a numeric list. Information under EXAM, HISTORY, TECHNIQUE, and COMPARISON should be formatted as plain text without any listing at all. If information is not provided for HISTORY or COMPARISON, insert either 'Not available' or 'None' respectively.  Use examples as templates for formatting and ensure the output aligns with radiology reporting standards. Avoid giving medical advice or diagnoses unless explicitly requested by the user in the context of a report format suggestion. Ask for clarification when necessary, tailor your responses to be concise, professional, and friendly, mirroring the precision required in medical documentation while maintaining an engaging interaction.`,
+          },
+          {
+            role: "user",
+            content: `Please produce a radiology report from the following information:  ${stringContent}`,
+          },
+        ],
+        temperature: 0.7,
+      }),
+    });
+    const data = await response.json();
+    if(data){
+      console.log('server data is', data);
+    }else {
+      console.log('no server data')
+      console.log(response);
+      
+    }
+    // console.log("server data is:", data);
+    console.log("Your radiology report:");
+    console.log("");
+    console.log("");
+    console.log("___");
+    // console.log(data.choices[0].message.content);
+    console.log("___");
+    res.json(data);
+
+    return data.choices[0].message.content;
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
+
+app.post("/api/createJson", async (req, res) => {
+  try {
+    const { content } = req.body;
+    console.log("server json content is:", content);
+    const stringContent = JSON.stringify(content);
+    console.log(stringContent)
+    console.log(typeof stringContent);
+  
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "system",
+
+            content: `Your role is to assist users in converting Radiology reports in plaintext format into JSON format. The response to the user should resemble the following JSON format:{"exam": exam, "history": history,"technique": technique, "comparison": comparison,"findings": findings,"impressions": impressions, "clinical_summary":clinical_summary}, with fields not in quotations being filled by the relevant content from the information given by the user. The response should not include any extraneous information aside from the JSON data. When a user asks you to convert a radiology report into JSON, take a moment to read and analyze the given information, making note of information that could fall into the following six categories: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, and IMPRESSION. For CLINICAL_SUMMARY, the key-value should be the entire radiology report given by user formatted as a single line string. After analysis is complete, produce a JSON version of the file based off the analysis of the given information. Make sure the JSON consists of only the following 7 subsections in the following order: EXAM, HISTORY, TECHNIQUE, COMPARISON, FINDINGS, IMPRESSION, and CLINICAL_SUMMARY. Do not make additional subheaders beyond the aforementioned seven subsections. JSON key-values should all be one lined strings. If a report features multiple entries under a single header, the multiple entries should be converted to a single line string with a period and a space separating each entry. Do not use arrays in the JSON. Do not include any new words or remove words from the radiology report when making the JSON. Use examples as templates for formatting and ensure the output aligns with typical JSON conventions. Avoid giving medical advice or diagnoses unless explicitly requested by the user in the context of a report format suggestion.`,
+          },
+          {
+            role: "user",
+            content: `Please convert the following radiology report into JSON format with only 7 keys: exam, history, technique, comparison, findings, impression, and clinical_summary. ${stringContent}`,
+          },
+        ],
+        temperature: 0.7,
+      }),
+    });
+    const data = await response.json();
+    console.log("Your JSON:");
+    console.log("");
+    console.log("");
+    console.log("___");
+    console.log(data.choices[0].message.content);
+    console.log("___");
+    res.json(data);
+
+    return data.choices[0].message.content;
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
+
+*/

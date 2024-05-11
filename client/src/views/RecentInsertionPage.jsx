@@ -25,7 +25,7 @@ const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
       "TECHNIQUE",
       "COMPARISON",
       "FINDINGS",
-      "IMPRESSION",
+      "IMPRESSIONS",
     ];
     const parts = { Clinical_summary: summary, TIME: time }; // Including time directly
 
@@ -62,7 +62,7 @@ const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
       "TECHNIQUE",
       "COMPARISON",
       "FINDINGS",
-      "IMPRESSION",
+      "IMPRESSIONS",
     ];
 
     // Object to hold the JSX for each section
@@ -81,15 +81,15 @@ const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
       });
     });
 
-    // Convert findings and IMPRESSION into ordered list items
+    // Convert findings and IMPRESSIONS into ordered list items
     if (summaryJSX["FINDINGS"]) {
       summaryJSX["FINDINGS"] = renderListItems(summaryJSX["FINDINGS"]);
     } else if (summaryJSX["findings"]) {
       summaryJSX["findings"] = renderListItems(summaryJSX["findings"]);
     }
 
-    if (summaryJSX["IMPRESSION"]) {
-      summaryJSX["IMPRESSION"] = renderListItems(summaryJSX["IMPRESSION"]);
+    if (summaryJSX["IMPRESSIONS"]) {
+      summaryJSX["IMPRESSIONS"] = renderListItems(summaryJSX["IMPRESSIONS"]);
     } 
 
     return summaryJSX;
@@ -154,7 +154,7 @@ const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
           </section>
         )}
 
-          {summaryJSX["IMPRESSION"] && (
+          {summaryJSX["IMPRESSIONS"] && (
             <section
               className="entry-section impressions"
               style={{ borderTop: "0px" }}
@@ -165,7 +165,7 @@ const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
                   <p>
                     <strong>Impressions</strong>
                   </p>
-                  <ol className="section-text">{summaryJSX["IMPRESSION"]}</ol>
+                  <ol className="section-text">{summaryJSX["IMPRESSIONS"]}</ol>
                 </span>
               </div>
             </section>
@@ -229,7 +229,7 @@ const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
               </div>
             </section>
           )}
-          {summaryJSX["IMPRESSION"] && (
+          {summaryJSX["IMPRESSIONS"] && (
             <section
               className="entry-section impressions"
               style={{ borderTop: "0px" }}
@@ -240,7 +240,7 @@ const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
                   <p>
                     <strong>Impressions</strong>
                   </p>
-                  <ol className="section-text">{summaryJSX["IMPRESSION"]}</ol>
+                  <ol className="section-text">{summaryJSX["IMPRESSIONS"]}</ol>
                 </span>
               </div>
             </section>
