@@ -39,6 +39,44 @@ const ReportForm = ({
     setIsFormReady(e.target.value.trim() !== "");
   };
 
+  function formatToJSON(inputObject) {
+    console.log(inputObject);
+    // Combine the array into a single string and remove unwanted formatting
+    let combinedString = inputObject.report.replace(/\n+/g, ' ').replace(/[*]/g, '').replace(/\s{2,}/g, ' ');
+
+    // Define the keys to search for
+    const keys = ["EXAM", "HISTORY", "TECHNIQUE", "COMPARISON", "FINDINGS", "IMPRESSIONS"];
+    
+    // Create an empty object to store the extracted data
+    let data = {
+        exam: "",
+        history: "",
+        technique: "",
+        comparison: "",
+        findings: "",
+        impressions: "",
+        clinical_summary: ""
+    };
+
+    // Iterate through the keys to extract the corresponding values
+    for (let i = 0; i < keys.length; i++) {
+        let startIndex = combinedString.indexOf(keys[i] + ": ");
+        let endIndex = i < keys.length - 1 ? combinedString.indexOf(keys[i + 1] + ": ") : combinedString.length;
+        if (startIndex !== -1) {
+            data[keys[i].toLowerCase()] = combinedString.substring(startIndex + keys[i].length + 2, endIndex).trim();
+        }
+    }
+
+    // Create the clinical summary with key names included
+    data.clinical_summary = `EXAM: ${data.exam} HISTORY: ${data.history} TECHNIQUE: ${data.technique} COMPARISON: ${data.comparison} FINDINGS: ${data.findings} IMPRESSIONS: ${data.impressions}`;
+
+    // Return the JSON object
+    console.log(JSON.stringify(data, null, 2));
+    return JSON.stringify(data, null, 2);
+
+}
+
+
   const handleProcessReport = async (jsonResponse) => {
     try {
       const token = await getBetterToken();
@@ -63,6 +101,23 @@ const ReportForm = ({
     }
     setLoading(true); 
     try {
+      console.log("formdata is:", formData);
+      const response = formatToJSON(formData);
+      setJson(response);
+      if (response) {
+        handleProgress();
+        await handleProcessReport(response);
+      }
+    } catch (error) {
+      console.error("Error during submission:", error);
+    } finally {
+      setLoading(false); 
+    }
+
+
+
+/* 
+    try {
       const response = await jsonGPT(formData);
       setJson(response);
       if (response) {
@@ -74,6 +129,12 @@ const ReportForm = ({
     } finally {
       setLoading(false); 
     }
+
+
+*/
+
+
+
   };
 
   return (
