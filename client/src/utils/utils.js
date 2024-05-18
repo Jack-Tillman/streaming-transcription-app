@@ -170,35 +170,3 @@ async function refreshToken() {
   sessionStorage.setItem("authToken", token); // Update stored token
   return token;
 }
-
-// Wrapper function to make API calls with auto-refresh logic
-async function fetchWithTokenRefresh(url, options = {}) {
-  let token = sessionStorage.getItem("authToken");
-
-  // Check if token needs refresh
-  if (needsTokenRefresh(token)) {
-    token = await refreshToken();
-  }
-
-  // Ensure the header has the updated token
-  options.headers = {
-    ...options.headers,
-    Authorization: `Bearer ${token}`,
-  };
-
-  // Proceed with the original fetch request
-  return fetch(url, options);
-}
-
-// Example usage
-// async function makeAPICall() {
-//   try {
-//     const response = await fetchWithTokenRefresh("/api/protected");
-//     if (!response.ok) throw new Error("Failed to fetch data");
-//     const data = await response.json();
-//     console.log(data);
-//   } catch (error) {
-//     console.error("Error making API call:", error);
-//     // Handle error
-//   }
-// }

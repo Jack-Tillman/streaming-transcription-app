@@ -69,6 +69,7 @@ const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
     const summaryJSX = {};
 
     // Temporary variable to hold the current key while iterating
+    // eslint-disable-next-line no-unused-vars
     let currentKey = null;
 
     // Split the summary text at each main key
