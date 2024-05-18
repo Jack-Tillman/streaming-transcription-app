@@ -26,11 +26,13 @@ export async function makeComposition(token, jsonString) {
     //current error location
     console.log('jsonString is:', jsonString);
     const inputObject = JSON.parse(jsonString);
-
+    console.log('inputobject is')
+    console.log(inputObject);
     //convert to target json fields for ehr insertion
     const targetInput = transformRadiologyReport(inputObject);
     const raw = JSON.stringify(targetInput);
-
+    console.log('raw is ');
+    console.log(raw);
     const response = await fetch("/api/post", {
       method: "POST",
       headers: {

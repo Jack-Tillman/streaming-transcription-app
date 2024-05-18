@@ -96,6 +96,7 @@ const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
   };
 
   const data = parseClinicalSummary(clinicalSummary, formattedTime);
+  console.log("RIT page data is:");
   console.log(data); 
 
   const renderListItems = (text) => {
@@ -162,9 +163,6 @@ const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
               <div className="section-row">
                 <span className="section-label">Impressions</span>
                 <span className="section-text">
-                  <p>
-                    <strong>Impressions</strong>
-                  </p>
                   <ol className="section-text">{summaryJSX["IMPRESSIONS"]}</ol>
                 </span>
               </div>
@@ -245,22 +243,6 @@ const RecentInsertionPage = ({ databaseEntry, handleProgress }) => {
               </div>
             </section>
           )}
-          {/* {summaryJSX["IMPRESSIONS"] && (
-            <section
-              className="entry-section impressions"
-              style={{ borderTop: "0px" }}
-            >
-              <div className="section-row">
-                <span className="section-label"></span>
-                <span className="section-text">
-                  <p>
-                    <strong>Impressions</strong>
-                  </p>
-                  <ol className="section-text">{summaryJSX["IMPRESSIONS"]}</ol>
-                </span>
-              </div>
-            </section>
-          )} */}
         </section>
       </main>
     </div>

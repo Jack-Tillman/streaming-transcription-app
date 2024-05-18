@@ -40,9 +40,11 @@ const ReportForm = ({
   };
 
   function formatToJSON(inputObject) {
+    console.log('input object in reportform is:');
     console.log(inputObject);
     // Combine the array into a single string and remove unwanted formatting
     let combinedString = inputObject.report.replace(/\n+/g, ' ').replace(/[*]/g, '').replace(/\s{2,}/g, ' ');
+    console.log('combined string is:', combinedString);
 
     // Define the keys to search for
     const keys = ["EXAM", "HISTORY", "TECHNIQUE", "COMPARISON", "FINDINGS", "IMPRESSIONS"];
@@ -71,9 +73,9 @@ const ReportForm = ({
     data.clinical_summary = `EXAM: ${data.exam} HISTORY: ${data.history} TECHNIQUE: ${data.technique} COMPARISON: ${data.comparison} FINDINGS: ${data.findings} IMPRESSIONS: ${data.impressions}`;
 
     // Return the JSON object
+    console.log('json object from reportform is...');
     console.log(JSON.stringify(data, null, 2));
     return JSON.stringify(data, null, 2);
-
 }
 
 
@@ -113,28 +115,6 @@ const ReportForm = ({
     } finally {
       setLoading(false); 
     }
-
-
-
-/* 
-    try {
-      const response = await jsonGPT(formData);
-      setJson(response);
-      if (response) {
-        handleProgress();
-        await handleProcessReport(response);
-      }
-    } catch (error) {
-      console.error("Error during submission:", error);
-    } finally {
-      setLoading(false); 
-    }
-
-
-*/
-
-
-
   };
 
   return (
