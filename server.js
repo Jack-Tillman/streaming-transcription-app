@@ -32,7 +32,7 @@ const setupDeepgram = (ws) => {
   keepAlive = setInterval(() => {
     // console.log("deepgram: keepalive");
     deepgram.keepAlive();
-  }, 10 * 1000);
+  }, 120 * 1000);
 
   deepgram.addListener(LiveTranscriptionEvents.Open, async () => {
     console.log("deepgram: connected");
